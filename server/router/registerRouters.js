@@ -1,17 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
- const { verifyToken, generateToken } = require("../jwt");
 const db = require("../db");
 
 router.post("/api/register", async (req, res) => {
-
   console.log("Help!");
   const { username, email, password } = req.body;
- 
+
   try {
     const isUserExisting = await db.query(
-      "SELECT * FROM users WHERE email = $1",
+      "SELECT * FROM user WHERE email = $1",
       [email]
     );
 
@@ -24,9 +22,9 @@ router.post("/api/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await pool.query(
-      "INSERT INTO users (username, email, hashedPassword"
+      "INSERT INTO user (username, email, hashedPassword"
     );
-    res.json({ users: newUser.rows });
+    res.json({ user: newUser.rows });
     return res.status(201).json({ message: "Registered Successfully!" });
   } catch (error) {
     console.error("Error during registration:", error);

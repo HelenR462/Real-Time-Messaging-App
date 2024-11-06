@@ -7,9 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Define findUser
 async function findUser(email) {
-  const result = await db.query("SELECT * FROM users WHERE email = $1", [
-    email,
-  ]);
+  const result = await db.query("SELECT * FROM user WHERE email = $1", [email]);
   return result.rows[0];
 }
 
