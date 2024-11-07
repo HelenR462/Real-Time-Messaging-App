@@ -21,7 +21,7 @@ function HomePage() {
 
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/user", {
+        const response = await axios.get("api/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -40,7 +40,7 @@ function HomePage() {
     localStorage.removeItem("token");
     window.location.reload();
     setTimeout(() => {
-      navigate("/Login");
+      navigate("/");
     }, 2000);
     // Reload to trigger redirect to login if no token
   };
