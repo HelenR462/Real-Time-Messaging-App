@@ -17,7 +17,7 @@ function Register() {
     try {
       const response = await axios.post("/api/register", inputValue);
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setMessage(response.data.message);
         console.log("Navigating to LoginPage");
         navigate("/");

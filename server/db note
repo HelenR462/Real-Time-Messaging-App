@@ -1,5 +1,9 @@
 CREATE TABLE users (
-  user_id SERIAL PRIMARY KEY, username VARCHAR(50) NOT NULL, email VARCHAR(100) UNIQUE NOT NULL, passwordhush VARCHAR(255) NOT NULL, SELECT CURRENT_DATE();
+  user_id SERIAL PRIMARY KEY, 
+  username VARCHAR(50) NOT NULL, 
+  email VARCHAR(100) UNIQUE NOT NULL, 
+  passwordhush VARCHAR(255) NOT NULL, 
+  SELECT CURRENT_DATE();
 );
 
 INSERT INTO users (user_id, user_name, email, passwordhash, timestamp) VALUES ($1, $2, $3);

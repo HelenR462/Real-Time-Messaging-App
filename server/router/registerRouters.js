@@ -3,29 +3,41 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const db = require("../db");
 
+// Define registerUser function
+async function registerUser(username, email, passwordhush) {
+  // Insert the new user into the database
+  const result = await db.query(
+    "INSERT INTO public.user (username, email, passwordhush) VALUES ($1, $2, $3) RETURNING *",
+    [username, email, passwordhush]
+  );
+  return result.rows[0];
+}
+
+// Define the route for user registration
 router.post("/register", async (req, res) => {
-  console.log("Help!");
   const { username, email, password } = req.body;
 
   try {
-    const isUserExisting = await db.query(
-      "SELECT * FROM user WHERE email = $1",
+    // Check if user with this email already exists
+    const existingUser = await db.query(
+      "SELECT * FROM public.user WHERE email = $1",
       [email]
     );
 
-    if (isUserExisting.rows.length > 0) {
+    if (existingUser.rows.length > 0) {
       return res
         .status(409)
         .json({ message: "Email already registered. Try Logging in." });
     }
 
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await pool.query(
-      "INSERT INTO user (username, email, hashedPassword"
-    );
-    res.json({ user: newUser.rows });
-    return res.status(201).json({ message: "Registered Successfully!" });
+    // Register the user with hashed password
+    const newUser = await registerUser(username, email, hashedPassword);
+
+    // Send response
+    return res.status(201).json({ message: "Registered Successfully!", user: newUser });
   } catch (error) {
     console.error("Error during registration:", error);
     res

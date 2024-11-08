@@ -7,7 +7,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Define findUser
 async function findUser(email) {
-  const result = await db.query("SELECT * FROM user WHERE email = $1", [email]);
+  const result = await db.query("SELECT * FROM public.user WHERE email = $1", [
+    email,
+  ]);
   return result.rows[0];
 }
 
@@ -18,23 +20,24 @@ router.post("/login", async (req, res) => {
     const user = await findUser(email);
 
     if (!user) {
-      return res.status(404).json({ msg: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Verify password
-    const passwordIsMatch = await bcrypt.compare(password, user.password);
+    const passwordIsMatch = await bcrypt.compare(password, user.passwordhush);
     if (!passwordIsMatch) {
       return res.status(400).json({ message: "Invalid password!" });
     }
 
-    // Generate token
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+    // Generate token using the correct `user_id`
+    const token = jwt.sign({ email: user.email }, JWT_SECRET, {
       expiresIn: "1h",
     });
+
     res.json({ message: "Login successful!", token });
   } catch (error) {
     console.error("Error logging in:", error.message);
-    res.status(500).json({ message: "Error logging in!" });
+    res.status(500).json({ message: "Internal server error during login" });
   }
 });
 
