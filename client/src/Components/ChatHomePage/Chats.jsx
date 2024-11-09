@@ -24,12 +24,12 @@ function Chats({ setChats }) {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+
+           }
+        
       );
 
-      setChats((prevChats) => [...prevChats, response.data.chat]);
-      setChatUser("");
-    
+     
     } catch (error) {
       console.error("Error creating chat:", error.response || error);
      
@@ -39,6 +39,7 @@ function Chats({ setChats }) {
   const handleUserChange = (e) => {
     setChatUser(e.target.value);
     setUserLabel(chatUser ? ` ${e.target.value}`: chatUser);
+    setChats("")
   };
 
   return (

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
 
-function HomePage() {
+function HomePage({setUserLoginValue}) {
   const [user, setUser] = useState(null);
   const [chats, setChats] = useState([]);
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ function HomePage() {
         setUser(response.data.user);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        // handleLogout();
+       
       }
     };
 
@@ -50,7 +50,8 @@ function HomePage() {
      
         <div>
            {/* {user ? ( */}
-          <h1>Welcome, {user}!</h1>
+          <h1>Welcome, {user}
+            !</h1>
             {/* // ) : (
       //   <p>Loading...</p> */}
       {/* )} */}
