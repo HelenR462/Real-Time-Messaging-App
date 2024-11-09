@@ -6,13 +6,13 @@ import HomePage from "./Components/HomePage";
 import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
 import Chats from "./Components/ChatHomePage/Chats";
 
-function App({message}) {
+function App() {
   
    return (
     <div className='app'>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Login message={message} />} />
+          <Route path='/' element={<Login  />} />
           <Route path='/register' element={<Register />} />
           <Route path='/homepage' element={<HomePage />} />
           <Route path='/chatdisplay' element={<ChatDisplay />} />

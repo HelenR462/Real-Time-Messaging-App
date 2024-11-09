@@ -6,8 +6,13 @@ function Chats({ setChats }) {
   const [userLabel, setUserLabel] = useState("UserName");
 
   const handleCreateChat = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
     const token = localStorage.getItem("token");
+    
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -23,45 +28,33 @@ function Chats({ setChats }) {
       );
 
       setChats((prevChats) => [...prevChats, response.data.chat]);
-      setChatUser(""); // Clear input after creating chat
-      // ("Chat created! Add another User?"); 
-      // Update the label after chat is created
+      setChatUser("");
+    
     } catch (error) {
-      console.error("Error creating chat:", error);
-      // ("Error! Try again.");
-       // Update label to indicate an error
+      console.error("Error creating chat:", error.response || error);
+     
     }
   };
 
   const handleUserChange = (e) => {
     setChatUser(e.target.value);
-    if (e.target.value === "") {
-      // ("Enter chat User"); 
-      // Reset label if input is cleared
-    } else {
-      // `Chatting with: ${e.target.value}`; 
-      // Dynamic label based on input
-      console.log('userLabel:', userLabel)
-    }
+    setUserLabel(chatUser ? ` ${e.target.value}`: chatUser);
   };
 
   return (
-    <form onSubmit={handleCreateChat} className='new-chat-form'>
-      <label onChange={(e)=> setUserLabel(userLabel)}>
+    <form onSubmit={handleCreateChat} className="new-chat-form">
+      <label>
         {userLabel}:
         <input
-          type='text'
+          type="text"
           value={chatUser}
           onChange={handleUserChange}
-          placeholder='What is up?!'
+          placeholder="Enter username"
         />
-         <button type='submit'>Send</button>
       </label>
-     
+      <button type="submit">Send</button>
     </form>
   );
 }
 
 export default Chats;
-
-

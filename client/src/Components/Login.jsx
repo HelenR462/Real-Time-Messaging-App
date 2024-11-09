@@ -17,7 +17,13 @@ function Login() {
       const response = await axios.post("/api/login", userLoginValue);
       setUserLoginValue(response)
       setMessage("Login successful!");
-      navigate("/homepage");
+
+       const token = response.data.token;
+
+      if (token) {
+        localStorage.setItem("token", token);
+       navigate("/homepage");
+       }
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {

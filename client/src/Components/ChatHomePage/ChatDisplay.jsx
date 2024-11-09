@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 function ChatDisplay({ chats }) {
   return (
     <div className="chat-display">
@@ -11,7 +12,9 @@ function ChatDisplay({ chats }) {
           </li>
         ))}
       </ul>
+   
     </div>
+    
   );
 }
 
