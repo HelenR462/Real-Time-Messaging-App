@@ -16,7 +16,7 @@ function Chats({ setChats }) {
 
     try {
       const response = await axios.post(
-        "/api/create-chat",
+        "/api/chat",
         {
           User: chatUser,
         },

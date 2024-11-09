@@ -4,6 +4,7 @@ const cors = require("cors");
 const { Pool } = require("pg");
 const loginRoutes = require("./router/loginRouters");
 const registerRoutes = require("./router/registerRouters");
+
 require("dotenv").config();
 
 const port = 3001;
@@ -24,8 +25,6 @@ const pool = new Pool({
 pool.connect().then(() => {
   console.log("Connected to PostgreSQL database");
 });
-
-
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
