@@ -2,16 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Register() {
-  const [inputValue, setInputValue] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+function Register({inputValue, setInputValue}) {
+  
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {

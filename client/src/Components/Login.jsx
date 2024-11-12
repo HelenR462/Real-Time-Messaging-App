@@ -2,33 +2,27 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
-  const [userLoginValue, setUserLoginValue] = useState({
-    email: "",
-    password: "",
-  });
+function Login({ inputValue ={}, setInputValue }) {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
+  
+    const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/login", userLoginValue);
-      setUserLoginValue(response)
+      const response = await axios.post("/api/login", inputValue);
       setMessage("Login successful!");
-
-       const token = response.data.token;
+      const token = response.data.token;
 
       if (token) {
         localStorage.setItem("token", token);
-       navigate("/homepage");
-       }
+        navigate("/homepage");
+      }
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
           setMessage("User not found. Redirecting to register...");
-           setTimeout(() => {
+          setTimeout(() => {
             navigate("/register");
           }, 2000);
         } else if (error.response.status === 401) {
@@ -38,46 +32,62 @@ function Login() {
         }
       }
     }
-   };
+  };
 
   return (
     <div>
-      <form className='login' onSubmit={handleSubmit}>
+      <form className="login" onSubmit={handleSubmit}>
         <h1>Log In</h1>
-        <label htmlFor='email'>Email:</label>
+        <label>
+          Username:
+          <input
+            id="username"
+            name="username"
+            type="text"
+            value={inputValue.username}
+            onChange={(e) =>
+              setInputValue({
+                ...inputValue,
+                [e.target.name]: e.target.value,
+              })
+            }
+            placeholder="Enter your username"
+          />
+        </label>
+        <label htmlFor="email">Email:</label>
         <input
-          className='input'
-          id='email'
-          type='email'
-          name='email'
-          value={userLoginValue.email}
+          className="input"
+          id="email"
+          type="email"
+          name="email"
+          value={inputValue.email}
           onChange={(e) =>
-            setUserLoginValue({
-              ...userLoginValue,
+            setInputValue({
+              ...inputValue,
               [e.target.name]: e.target.value,
             })
           }
-          placeholder='Enter your email'
-          title='Please enter a valid e-mail'
+          placeholder="Enter your email"
+          title="Please enter a valid e-mail"
           required
         />
-        <label htmlFor='password'>Password:</label>
+        <label htmlFor="password">Password:</label>
         <input
-          id='password'
-          type='password'
-          name='password'
-          value={userLoginValue.password}
+          id="password"
+          type="password"
+          name="password"
+          value={inputValue.password}
           onChange={(e) =>
-            setUserLoginValue({
-              ...userLoginValue,
+            setInputValue({
+              ...inputValue,
               [e.target.name]: e.target.value,
             })
           }
-          placeholder='Enter your password'
-          title='Please enter correct password!'
+          placeholder="Enter your password"
+          title="Please enter correct password!"
           required
         />
-        <button type='submit'>Log In</button>
+        <button type="submit">Log In</button>
       </form>
       {message && <p>{message}</p>}
     </div>

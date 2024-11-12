@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
@@ -7,16 +7,23 @@ import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
 import Chats from "./Components/ChatHomePage/Chats";
 
 function App() {
+  const [inputValue, setInputValue] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  
   
    return (
     <div className='app'>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Login  />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/homepage' element={<HomePage />} />
+          <Route path='/' element={<Login inputValue={inputValue} setInputValue={setInputValue} />} />
+          <Route path='/register' element={<Register inputValue={inputValue} setInputValue={setInputValue} />} />
+          <Route path='/homepage' element={<HomePage inputValue={inputValue}/>} />
           <Route path='/chatdisplay' element={<ChatDisplay />} />
-          <Route path='/chats' element={<Chats />} />
+          <Route path='/chats' element={<Chats inputValue={inputValue}/>} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -3,9 +3,9 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const db = require("../db");
 
-// Define registerUser function
 async function registerUser(username, email, passwordhush) {
-  // Insert the new user into the database
+ 
+  
   const result = await db.query(
     "INSERT INTO public.user (username, email, passwordhush) VALUES ($1, $2, $3) RETURNING *",
     [username, email, passwordhush]

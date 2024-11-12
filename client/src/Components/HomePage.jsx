@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
 
-function HomePage({setUserLoginValue}) {
-  const [user, setUser] = useState(null);
+function HomePage({inputValue ={} }) {
+  const [user, setUser] = useState(inputValue.username);
   const [chats, setChats] = useState([]);
   const navigate = useNavigate();
+
+  console.log("inputValue:", inputValue);
 
 
   const handleLogout = useCallback(() => {
@@ -20,6 +22,7 @@ function HomePage({setUserLoginValue}) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    // console.log("Token:", token);
 
    if (!token ) {
      handleLogout();
@@ -29,38 +32,54 @@ function HomePage({setUserLoginValue}) {
 
     const fetchUserData = async () => {
       try {
-        const response = await axios.post("/api/user", {
+        const response = await axios.post("/api/user", 
+          {username: inputValue?.username},
+          {
+           
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         });
-        setUser(response.data.user);
+
+        if (response.data && response.data.user) {
+          setUser(response.data.user);
+        } else {
+          console.log("User data not found in response");
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
-       
+        if (error.response && error.response.status === 401) {
+          console.log("Token expired or invalid. Logging out...");
+          handleLogout();
+        }
       }
     };
 
     fetchUserData();
-  }, [handleLogout]);
+  }, [handleLogout,inputValue?.username]);
 
  
   return (
     <div className="home-page">
-     
-        <div>
-           {/* {user ? ( */}
-          <h1>Welcome, {user}
-            !</h1>
-            {/* // ) : (
-      //   <p>Loading...</p> */}
-      {/* )} */}
+       <div>
+           {user ? (
+          <h1>Welcome, 
+                <p>{inputValue?.username}</p>
+          </h1>
+             ) : (
+       <p>Loading...</p> 
+       )}
           <button onClick={handleLogout}>Log Out</button>
         </div>
     
       <div>
-        <ChatDisplay chats={chats} />
-        <Chats setChats={setChats} />
+        <ChatDisplay 
+        inputValue={inputValue}
+        chats={chats} />
+        <Chats 
+        inputValue={inputValue}
+        setChats={setChats} />
       </div>
     </div>
   );

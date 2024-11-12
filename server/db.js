@@ -1,4 +1,4 @@
-const { Pool, Client } = require("pg");
+const { Pool } = require("pg");
 require("dotenv").config();
 
 const pool = new Pool({
@@ -6,9 +6,7 @@ const pool = new Pool({
   host: process.env.HOST,
   database: process.env.DATABASE,
   password: process.env.PASSWORD,
-  
 });
-
 
 // const client = new Client({
 //   user: process.env.USER,
@@ -27,4 +25,8 @@ const pool = new Pool({
 
 // module.exports = client;
 
-module.exports = pool;
+// module.exports = pool;
+
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+};
