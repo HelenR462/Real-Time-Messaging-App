@@ -4,13 +4,12 @@ import { useNavigate } from "react-router-dom";
 import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
 
-function HomePage({inputValue ={} }) {
+function HomePage({ inputValue = {} }) {
   const [user, setUser] = useState(inputValue.username);
   const [chats, setChats] = useState([]);
   const navigate = useNavigate();
 
   console.log("inputValue:", inputValue);
-
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
@@ -19,28 +18,41 @@ function HomePage({inputValue ={} }) {
     }, 2000);
   }, [navigate]);
 
-
   useEffect(() => {
     const token = localStorage.getItem("token");
-    // console.log("Token:", token);
 
-   if (!token ) {
-     handleLogout();
-     console.log("No token found");
+    if (!token) {
+      handleLogout();
+      console.log("No token found");
       return;
     }
 
     const fetchUserData = async () => {
       try {
-        const response = await axios.post("/api/user", 
-          {username: inputValue?.username},
-          {
-           
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+     
+        const allUsers = await axios.get("/api/users", {
+          headers: { Authorization: `Bearer ${token}` },
         });
+        console.log("All users:", allUsers.data);
+
+       
+        const singleUserId = "1"; 
+        const singleUser = await axios.get(`/api/users/${singleUserId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("Single user:", singleUser.data);
+
+      
+        const response = await axios.post(
+          "/api/users",
+          { username: inputValue?.username },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (response.data && response.data.user) {
           setUser(response.data.user);
@@ -57,29 +69,25 @@ function HomePage({inputValue ={} }) {
     };
 
     fetchUserData();
-  }, [handleLogout,inputValue?.username]);
+  }, [handleLogout, inputValue?.username]);
 
- 
   return (
     <div className="home-page">
-       <div>
-           {user ? (
-          <h1>Welcome, 
-                <p>{inputValue?.username}</p>
-          </h1>
-             ) : (
-       <p>Loading...</p> 
-       )}
-          <button onClick={handleLogout}>Log Out</button>
-        </div>
-    
       <div>
-        <ChatDisplay 
-        inputValue={inputValue}
-        chats={chats} />
-        <Chats 
-        inputValue={inputValue}
-        setChats={setChats} />
+        {user ? (
+          <h1>
+            Welcome,
+            <p>{inputValue?.username}</p>
+          </h1>
+        ) : (
+          <p>Loading...</p>
+        )}
+        <button onClick={handleLogout}>Log Out</button>
+      </div>
+
+      <div>
+        <ChatDisplay inputValue={inputValue} chats={chats} />
+        <Chats inputValue={inputValue} setChats={setChats} />
       </div>
     </div>
   );

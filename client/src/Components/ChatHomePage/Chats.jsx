@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function Chats({ inputValue ={}, setChats }) {
+function Chats({ inputValue = {}, setChats }) {
   const [chatUser, setChatUser] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -22,19 +22,21 @@ function Chats({ inputValue ={}, setChats }) {
     }
 
     try {
+      // create a chat messages
       const response = await axios.post(
-        "/api/messages",  { User: chatUser },
-        { 
-          headers: 
-          { Authorization: `Bearer ${token}` } 
+        "/api/messages",
+        { User: chatUser },
+        {
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       if (response.data) {
         setChats((prevChats) => [...prevChats, response.data]);
+        setMessages((prevMessages) => [...prevMessages, response.data]);
         setSuccess("Chat created successfully!");
-        setChatUser(""); 
-        setError(null);  
+        setChatUser("");
+        setError(null);
       }
     } catch (error) {
       setError("Error creating chat. Please try again.");
@@ -44,23 +46,23 @@ function Chats({ inputValue ={}, setChats }) {
 
   const handleUserChange = (e) => {
     setChatUser(e.target.value);
-    setError(null); 
+    setError(null);
   };
 
   return (
-    <form onSubmit={handleCreateChat} className="new-chat-form">
+    <form onSubmit={handleCreateChat} className='new-chat-form'>
       <label>
         {inputValue?.username || "Username"}:
         <input
-          type="text"
+          type='text'
           value={chatUser}
           onChange={handleUserChange}
-          placeholder="Enter username"
+          placeholder='Enter username'
         />
       </label>
-      <button type="submit">Send</button>
-      {error && <p className="error-message">{error}</p>}
-      {success && <p className="success-message">{success}</p>}
+      <button type='submit'>Send</button>
+      {error && <p className='error-message'>{error}</p>}
+      {success && <p className='success-message'>{success}</p>}
     </form>
   );
 }

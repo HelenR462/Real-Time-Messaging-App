@@ -14,8 +14,10 @@ router.get("/messages", async (req, res) => {
   }
 });
 
-router.post("/chat", async (req, res) => {
+router.post("/messages", async (req, res) => {
   const { chatUser } = req.body;
+
+  console.log(req.body)
 
   if (!chatUser) {
     return res.status(400).json({ error: "ChatUser is required" });
@@ -26,7 +28,7 @@ router.post("/chat", async (req, res) => {
   try {
     const newChat = await db.query(
       "INSERT INTO public.messages (user_id, user_message) VALUES ($1, $2) RETURNING *",
-      [userId, userMessage]
+      [user_id, user_message]
     );
     res.status(201).json(newChat.rows[0]);
   } catch (error) {
