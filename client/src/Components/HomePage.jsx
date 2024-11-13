@@ -36,7 +36,7 @@ function HomePage({ inputValue = {} }) {
         console.log("All users:", allUsers.data);
 
        
-        const singleUserId = "1"; 
+       const singleUserId = "1"; 
         const singleUser = await axios.get(`/api/users/${singleUserId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });

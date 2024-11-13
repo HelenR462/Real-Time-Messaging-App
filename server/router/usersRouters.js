@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 async function findUser(id) {
   try {
-    const result = await db.query("SELECT * FROM public.user WHERE id = $1", [
+    const result = await db.query("SELECT * FROM public.users WHERE id = $1", [
       id,
     ]);
     return result.rows[0];
@@ -16,7 +16,7 @@ async function findUser(id) {
   }
 }
 
-router.get("/user", async (req, res) => {
+router.get("/users", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
@@ -40,7 +40,7 @@ router.get("/user", async (req, res) => {
   }
 });
 
-router.post("/user", async (req, res) => {
+router.post("/users", async (req, res) => {
   const { username } = req.body;
 
   console.log("Incoming request body:", req.body);
@@ -65,5 +65,21 @@ router.post("/user", async (req, res) => {
   }
 });
 
+router.get("/users/:id", async (req, res) => {
+  const userId = req.params.id; 
+
+      try {
+    const result = await db.query("SELECT * FROM public.users WHERE id = $1", [userId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 module.exports = router;

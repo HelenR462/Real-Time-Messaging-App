@@ -15,6 +15,7 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
       try {
         const response = await axios.get("/api/messages");//get all messages
         setMessages(response.data);
+        setMessages((prevMessages) => [...prevMessages, response.data]);
       } catch (err) {
         console.error("Error fetching messages:", err);
         setError("Failed to load messages.");

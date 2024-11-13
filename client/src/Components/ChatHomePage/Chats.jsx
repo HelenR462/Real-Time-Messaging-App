@@ -33,7 +33,6 @@ function Chats({ inputValue = {}, setChats }) {
 
       if (response.data) {
         setChats((prevChats) => [...prevChats, response.data]);
-        setMessages((prevMessages) => [...prevMessages, response.data]);
         setSuccess("Chat created successfully!");
         setChatUser("");
         setError(null);
