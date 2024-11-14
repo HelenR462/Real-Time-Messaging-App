@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../ChatHomePage/ChatDisplay.css";
 
-
 function ChatDisplay({ inputValue = {}, chats = [] }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,13 +12,14 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
       setLoading(true);
 
       try {
-        const response = await axios.get("/api/messages");//get all messages
+        const response = await axios.get("/api/messages"); //get all messages
         setMessages(response.data);
-        setMessages((prevMessages) => [...prevMessages, response.data]);
+       
       } catch (err) {
         console.error("Error fetching messages:", err);
         setError("Failed to load messages.");
-      } finally {
+      } 
+      finally {
         setLoading(false);
       }
     };
@@ -46,7 +46,10 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
           </li>
           <li>
             <a href='images' className='image'>
-              <img src='../src/Components/images/spongebob.jpg' alt='spongebob' />
+              <img
+                src='../src/Components/images/spongebob.jpg'
+                alt='spongebob'
+              />
             </a>
             <h6>Spongebob</h6>
           </li>
@@ -77,7 +80,7 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
             ))}
           </ul>
         )}
-            </div>
+      </div>
     </div>
   );
 }

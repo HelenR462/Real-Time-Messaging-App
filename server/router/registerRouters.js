@@ -7,7 +7,7 @@ async function registerUser(username, email, passwordhush) {
  
   
   const result = await db.query(
-    "INSERT INTO public.user (username, email, passwordhush) VALUES ($1, $2, $3) RETURNING *",
+    "INSERT INTO public.users (username, email, passwordhush) VALUES ($1, $2, $3) RETURNING *",
     [username, email, passwordhush]
   );
   return result.rows[0];
@@ -20,7 +20,7 @@ router.post("/register", async (req, res) => {
   try {
     // Check if user with this email already exists
     const existingUser = await db.query(
-      "SELECT * FROM public.user WHERE email = $1",
+      "SELECT * FROM public.users WHERE email = $1",
       [email]
     );
 

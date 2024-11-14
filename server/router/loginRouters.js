@@ -7,10 +7,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Define findUser
 async function findUser(email) {
-  const result = await db.query("SELECT * FROM public.user WHERE email = $1", [
+  const result = await db.query("SELECT * FROM public.users WHERE email = $1", [
     email,
   ]);
-  return result.rows[0];
+  return result.rows;
 }
 
 // Login route

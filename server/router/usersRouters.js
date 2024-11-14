@@ -50,7 +50,7 @@ router.post("/users", async (req, res) => {
   }
 
   try {
-    const result = await db.query("SELECT * FROM public.user WHERE username = $1", [username]);
+    const result = await db.query("SELECT * FROM public.users WHERE username = $1", [username]);
 
     if (result.rows.length === 0) {
       console.log(`User with username ${username} not found`);
