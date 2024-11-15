@@ -21,8 +21,8 @@ function Chats({ inputValue = {}, setChats }) {
       return;
     }
 
+    // create a chat messages
     try {
-      // create a chat messages
       const response = await axios.post(
         "/api/messages",
         { User: chatUser },

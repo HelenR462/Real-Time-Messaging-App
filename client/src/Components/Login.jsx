@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Login({ inputValue ={}, setInputValue }) {
+function Login({ inputValue = {}, setInputValue }) {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  
-    const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -25,7 +25,7 @@ function Login({ inputValue ={}, setInputValue }) {
           setTimeout(() => {
             navigate("/register");
           }, 2000);
-        } else if (error.response.status === 401) {
+        } else if (error.response.status === 400) {
           setMessage("Invalid email or password. Please try again.");
         } else {
           setMessage(`An error occurred: ${error.response.statusText}`);
@@ -36,14 +36,14 @@ function Login({ inputValue ={}, setInputValue }) {
 
   return (
     <div>
-      <form className="login" onSubmit={handleSubmit}>
+      <form className='login' onSubmit={handleSubmit}>
         <h1>Log In</h1>
         <label>
           Username:
           <input
-            id="username"
-            name="username"
-            type="text"
+            id='username'
+            name='username'
+            type='text'
             value={inputValue.username}
             onChange={(e) =>
               setInputValue({
@@ -51,15 +51,15 @@ function Login({ inputValue ={}, setInputValue }) {
                 [e.target.name]: e.target.value,
               })
             }
-            placeholder="Enter your username"
+            placeholder='Enter your username'
           />
         </label>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor='email'>Email:</label>
         <input
-          className="input"
-          id="email"
-          type="email"
-          name="email"
+          className='input'
+          id='email'
+          type='email'
+          name='email'
           value={inputValue.email}
           onChange={(e) =>
             setInputValue({
@@ -67,15 +67,15 @@ function Login({ inputValue ={}, setInputValue }) {
               [e.target.name]: e.target.value,
             })
           }
-          placeholder="Enter your email"
-          title="Please enter a valid e-mail"
+          placeholder='Enter your email'
+          title='Please enter a valid e-mail'
           required
         />
-        <label htmlFor="password">Password:</label>
+        <label htmlFor='password'>Password:</label>
         <input
-          id="password"
-          type="password"
-          name="password"
+          id='password'
+          type='password'
+          name='password'
           value={inputValue.password}
           onChange={(e) =>
             setInputValue({
@@ -83,11 +83,11 @@ function Login({ inputValue ={}, setInputValue }) {
               [e.target.name]: e.target.value,
             })
           }
-          placeholder="Enter your password"
-          title="Please enter correct password!"
+          placeholder='Enter your password'
+          title='Please enter correct password!'
           required
         />
-        <button type="submit">Log In</button>
+        <button type='submit'>Log In</button>
       </form>
       {message && <p>{message}</p>}
     </div>

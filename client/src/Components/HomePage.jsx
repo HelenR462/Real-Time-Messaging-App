@@ -5,7 +5,7 @@ import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
 
 function HomePage({ inputValue = {} }) {
-  const [user, setUser] = useState(inputValue.username);
+  const [user, setUser] = useState(inputValue.username || "");
   const [chats, setChats] = useState([]);
   const navigate = useNavigate();
 
@@ -27,22 +27,22 @@ function HomePage({ inputValue = {} }) {
       return;
     }
 
+    //get all users
     const fetchUserData = async () => {
       try {
-     
         const allUsers = await axios.get("/api/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("All users:", allUsers.data);
 
-       
-       const singleUserId = "7"; 
+        // get a single user
+        const singleUserId = "7";
         const singleUser = await axios.get(`/api/users/${singleUserId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("Single user:", singleUser.data);
 
-      
+        // create a new user
         const response = await axios.post(
           "/api/users",
           { username: inputValue?.username },
@@ -72,16 +72,9 @@ function HomePage({ inputValue = {} }) {
   }, [handleLogout, inputValue?.username]);
 
   return (
-    <div className="home-page">
+    <div className='home-page'>
       <div>
-        {user ? (
-          <h1>
-            Welcome,
-            <p>{inputValue?.username}</p>
-          </h1>
-        ) : (
-          <p>Loading...</p>
-        )}
+        {user ? <h1> Welcome, {inputValue?.username} </h1> : <p>Loading...</p>}
         <button onClick={handleLogout}>Log Out</button>
       </div>
 

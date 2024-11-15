@@ -50,14 +50,17 @@ router.post("/users", async (req, res) => {
   }
 
   try {
-    const result = await db.query("SELECT * FROM public.users WHERE username = $1", [username]);
+    const result = await db.query(
+      "SELECT * FROM public.users WHERE username = $1",
+      [username]
+    );
 
     if (result.rows.length === 0) {
       console.log(`User with username ${username} not found`);
       return res.status(404).json({ error: "User not found" });
     }
 
-    const user = result.rows[0]; 
+    const user = result.rows[0];
     res.json({ user });
   } catch (error) {
     console.error("Error fetching user from database:", error);
@@ -66,10 +69,12 @@ router.post("/users", async (req, res) => {
 });
 
 router.get("/users/:id", async (req, res) => {
-  const userId = req.params.id; 
+  const userId = req.params.id;
 
-      try {
-    const result = await db.query("SELECT * FROM public.users WHERE id = $1", [userId]);
+  try {
+    const result = await db.query("SELECT * FROM public.users WHERE id = $1", [
+      userId,
+    ]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "User not found" });
