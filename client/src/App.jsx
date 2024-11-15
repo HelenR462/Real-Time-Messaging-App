@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
+import Login from "./Components/LoginRegister/Login";
+import Register from "./Components/LoginRegister/Register";
 import HomePage from "./Components/HomePage";
 import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
 import Chats from "./Components/ChatHomePage/Chats";

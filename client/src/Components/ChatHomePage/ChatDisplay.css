@@ -1,3 +1,63 @@
-.chat-display{
-  border: 1px gray solid ;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
+
+ 
+.logout{
+  margin-left:85%;
+  margin-top:-15%
+}
+
+ .chat-display{
+  font-family: Arial, Helvetica, sans-serif;
+ margin-top: 50px;
+ display:inline-flex;
+ align-content: center;
+ justify-content: center;
+margin-left:15%;
+border-color: 1px solid Red
+ }
+
+.chat-users{
+  border: 2px rgba(35, 161, 161, 0.952) solid ;
+  width:150px;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color:rgba(226, 244, 244, 0.952); 
+}
+
+img{
+  height:50px;
+  width:50px;
+  border-radius: 50%;
+  border-color: black 2px solid;
+  margin:15px 0 0 5px;
+}
+
+li{
+  list-style: none;
+}
+
+
+h2{
+ display: flex;
+ align-items: center;
+ color:rgba(161, 66, 35, 0.952)
+}
+
+h6{
+  margin-top: 5px;
+  font-size: xx-small;
+  font-weight:200;
+ 
+}
+.chat-board{
+  border: 2px rgba(35, 161, 161, 0.952) solid ;
+  width:800px;
+  align-items: center;
+  margin:3px;
+  height:500px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color:rgba(226, 244, 244, 0.952); 
 }

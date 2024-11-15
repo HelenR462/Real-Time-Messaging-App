@@ -9,7 +9,7 @@ const usersRoutes = require("./router/usersRouters");
 
 require("dotenv").config();
 
-const port = 3001;
+const port = 5000;
 
 app.use(cors({ origin: "http://localhost:3000/" }));
 
@@ -30,8 +30,6 @@ const pool = new Pool({
 pool.connect().then(() => {
   console.log("Connected to PostgreSQL database");
 });
-
-
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

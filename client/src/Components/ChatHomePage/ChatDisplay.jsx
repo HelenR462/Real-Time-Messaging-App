@@ -6,6 +6,7 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -13,14 +14,12 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
 
       //get all messages
       try {
-        const response = await axios.get("/api/messages"); 
+        const response = await axios.get("/api/messages");
         setMessages(response.data);
-       
       } catch (err) {
         console.error("Error fetching messages:", err);
         setError("Failed to load messages.");
-      } 
-      finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -29,35 +28,26 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
   }, [inputValue?.username]);
 
   return (
-    <div>
-      <div className='sidebar'>
+    <div className='chat-display'>
+      <div className='chat-users'>
         <h2>Friends</h2>
-        <ul className='chat-users'>
+        <ul className='side-bar'>
           <li>
-            <a href='images' className='image'>
-              <img src='../images/sportivo.jpg' alt='sportivo' />
-            </a>
-            <h6>BB</h6>
+            <img src='../assets/images/sportivo.jpg' alt='sportivo' />
+            <h6>BibiTuti</h6>
           </li>
           <li>
-            <a href='images' className='image'>
-              <img src='../images/swanfairy.jpg' alt='swanfairy' />
-            </a>
+            <img src='../assets/images/swanfairy.jpg' alt='swanfairy' />
             <h6>SwanFairy</h6>
           </li>
           <li>
-            <a href='images' className='image'>
-              <img
-                src='../src/Components/images/spongebob.jpg'
-                alt='spongebob'
-              />
-            </a>
+            <img src='../assets/images/spongebob.jpg' alt='spongebob' />
             <h6>Spongebob</h6>
           </li>
         </ul>
       </div>
 
-      <div className='chat-display'>
+      <div className='chat-board'>
         <h2>Your Chats</h2>
 
         <ul>
@@ -82,7 +72,7 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
           </ul>
         )}
       </div>
-    </div>
+      </div>
   );
 }
 

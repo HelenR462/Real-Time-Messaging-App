@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./LoginRegister.css";
 
 function Login({ inputValue = {}, setInputValue }) {
   const [message, setMessage] = useState("");
@@ -10,7 +11,7 @@ function Login({ inputValue = {}, setInputValue }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/login", inputValue);
+      const response = await axios.post("/api/LoginRegister/login", inputValue);
       setMessage("Login successful!");
       const token = response.data.token;
 
@@ -35,12 +36,13 @@ function Login({ inputValue = {}, setInputValue }) {
   };
 
   return (
-    <div>
+    <div className="login-table">
       <form className='login' onSubmit={handleSubmit}>
         <h1>Log In</h1>
         <label>
           Username:
           <input
+            className='username'
             id='username'
             name='username'
             type='text'
@@ -56,7 +58,7 @@ function Login({ inputValue = {}, setInputValue }) {
         </label>
         <label htmlFor='email'>Email:</label>
         <input
-          className='input'
+          className='email'
           id='email'
           type='email'
           name='email'
@@ -73,6 +75,7 @@ function Login({ inputValue = {}, setInputValue }) {
         />
         <label htmlFor='password'>Password:</label>
         <input
+           className='password'
           id='password'
           type='password'
           name='password'
@@ -87,7 +90,9 @@ function Login({ inputValue = {}, setInputValue }) {
           title='Please enter correct password!'
           required
         />
-        <button type='submit'>Log In</button>
+        <button className='login' type='submit'>
+          Log In
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>

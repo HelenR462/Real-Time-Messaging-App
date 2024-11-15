@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./Chats.css";
 
 function Chats({ inputValue = {}, setChats }) {
   const [chatUser, setChatUser] = useState("");
@@ -51,7 +52,7 @@ function Chats({ inputValue = {}, setChats }) {
   return (
     <form onSubmit={handleCreateChat} className='new-chat-form'>
       <label>
-        {inputValue?.username || "Username"}:
+        {inputValue?.username || "Username"}:<br></br>
         <input
           type='text'
           value={chatUser}
@@ -59,7 +60,9 @@ function Chats({ inputValue = {}, setChats }) {
           placeholder='Enter username'
         />
       </label>
-      <button type='submit'>Send</button>
+      <button className='send' type='submit'>
+        Send
+      </button>
       {error && <p className='error-message'>{error}</p>}
       {success && <p className='success-message'>{success}</p>}
     </form>

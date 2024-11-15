@@ -63,7 +63,7 @@ function HomePage({ inputValue = {} }) {
         console.error("Error fetching user data:", error);
         if (error.response && error.response.status === 401) {
           console.log("Token expired or invalid. Logging out...");
-          handleLogout();
+          // handleLogout();
         }
       }
     };
@@ -75,7 +75,7 @@ function HomePage({ inputValue = {} }) {
     <div className='home-page'>
       <div>
         {user ? <h1> Welcome, {inputValue?.username} </h1> : <p>Loading...</p>}
-        <button onClick={handleLogout}>Log Out</button>
+        <button className="logout" onClick={handleLogout}>Log Out</button>
       </div>
 
       <div>

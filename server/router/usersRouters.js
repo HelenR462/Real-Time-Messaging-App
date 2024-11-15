@@ -25,7 +25,7 @@ router.get("/users", async (req, res) => {
 
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
-      const user = await findUser(decoded.id);
+      const user = await findUser(id);
       if (user) {
         res.json({ user });
       } else {

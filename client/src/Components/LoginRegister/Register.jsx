@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./LoginRegister.css"
 
 function Register({inputValue, setInputValue}) {
   
@@ -11,7 +12,7 @@ function Register({inputValue, setInputValue}) {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/register", inputValue);
+      const response = await axios.post("/api/LoginRegister/register", inputValue);
 
       if (response.status === 201) {
         setMessage(response.data.message);
@@ -64,7 +65,7 @@ function Register({inputValue, setInputValue}) {
         <label>
           Password:
           <input
-            className="passwd"
+            className="password"
             name="password"
             type="password"
             value={inputValue.password}
@@ -72,7 +73,7 @@ function Register({inputValue, setInputValue}) {
             placeholder="Enter your password"
           />
         </label>
-        <button type="submit">Register</button>
+        <button className="register" type="submit">Register</button>
       </form>
       {message && <p>{message}</p>}
     </div>
