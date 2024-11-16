@@ -14,7 +14,7 @@
  align-content: center;
  justify-content: center;
 margin-left:15%;
-border-color: 1px solid Red
+
  }
 
 .chat-users{
@@ -33,11 +33,11 @@ img{
   border-color: black 2px solid;
   margin:15px 0 0 5px;
 }
-
-li{
+ 
+.side-bar{
   list-style: none;
-}
-
+} 
+ 
 
 h2{
  display: flex;

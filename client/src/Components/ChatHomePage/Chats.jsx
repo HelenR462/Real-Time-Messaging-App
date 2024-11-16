@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Chats.css";
 
+
 function Chats({ inputValue = {}, setChats }) {
   const [chatUser, setChatUser] = useState("");
   const [error, setError] = useState(null);
@@ -26,7 +27,7 @@ function Chats({ inputValue = {}, setChats }) {
     try {
       const response = await axios.post(
         "/api/messages",
-        { User: chatUser },
+        { chatUser },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -50,14 +51,15 @@ function Chats({ inputValue = {}, setChats }) {
   };
 
   return (
-    <form onSubmit={handleCreateChat} className='new-chat-form'>
+       <form onSubmit={handleCreateChat} className='new-chat-form'>
       <label>
         {inputValue?.username || "Username"}:<br></br>
         <input
           type='text'
+          className="chat-input"
           value={chatUser}
           onChange={handleUserChange}
-          placeholder='Enter username'
+          placeholder='What is happening?'
         />
       </label>
       <button className='send' type='submit'>

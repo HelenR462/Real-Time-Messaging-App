@@ -37,43 +37,52 @@ function Register({inputValue, setInputValue}) {
   };
 
   return (
-    <div>
+    <div className="login-register-table">
       <form className="register" onSubmit={handleSubmit}>
         <h1>Register</h1>
         <label>
-          Username:
+        <span className='username' >
+            USERNAME
+          </span>
           <input
-            className="username"
-            name="username"
             type="text"
+            name='username'
             value={inputValue.username}
             onChange={handleOnChange}
             placeholder="Enter your username"
           />
         </label>
+
         <label>
-          Email:
+        <span className='email' >
+            EMAIL
+          </span>
           <input
-            className="email"
-            name="email"
             type="email"
+            name='email'
             value={inputValue.email}
             onChange={handleOnChange}
             placeholder="Enter your email"
+            title='Please enter a valid e-mail'
+            required
           />
         </label>
+
         <label>
-          Password:
+        <span className='password' >
+            PASSWORD
+          </span>
           <input
-            className="password"
-            name="password"
             type="password"
+            name='password'
             value={inputValue.password}
             onChange={handleOnChange}
             placeholder="Enter your password"
           />
         </label>
+
         <button className="register" type="submit">Register</button>
+        
       </form>
       {message && <p>{message}</p>}
     </div>

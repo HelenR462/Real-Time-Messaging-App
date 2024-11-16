@@ -4,10 +4,10 @@ const jwt = require("jsonwebtoken");
 const db = require("../db");
 const JWT_SECRET = process.env.JWT_SECRET;
 
-async function findUser(id) {
+async function findUser(user_id) {
   try {
     const result = await db.query("SELECT * FROM public.users WHERE id = $1", [
-      id,
+      user_id,
     ]);
     return result.rows[0];
   } catch (error) {
@@ -25,7 +25,7 @@ router.get("/users", async (req, res) => {
 
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
-      const user = await findUser(id);
+      const user = await findUser(decoded.user_id);
       if (user) {
         res.json({ user });
       } else {

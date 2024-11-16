@@ -36,16 +36,14 @@ function Login({ inputValue = {}, setInputValue }) {
   };
 
   return (
-    <div className="login-table">
+    <div className='login-register-table'>
       <form className='login' onSubmit={handleSubmit}>
         <h1>Log In</h1>
         <label>
-          Username:
+          <span className='username'>USERNAME</span>
           <input
-            className='username'
-            id='username'
-            name='username'
             type='text'
+            name='username'
             value={inputValue.username}
             onChange={(e) =>
               setInputValue({
@@ -56,40 +54,43 @@ function Login({ inputValue = {}, setInputValue }) {
             placeholder='Enter your username'
           />
         </label>
-        <label htmlFor='email'>Email:</label>
-        <input
-          className='email'
-          id='email'
-          type='email'
-          name='email'
-          value={inputValue.email}
-          onChange={(e) =>
-            setInputValue({
-              ...inputValue,
-              [e.target.name]: e.target.value,
-            })
-          }
-          placeholder='Enter your email'
-          title='Please enter a valid e-mail'
-          required
-        />
-        <label htmlFor='password'>Password:</label>
-        <input
-           className='password'
-          id='password'
-          type='password'
-          name='password'
-          value={inputValue.password}
-          onChange={(e) =>
-            setInputValue({
-              ...inputValue,
-              [e.target.name]: e.target.value,
-            })
-          }
-          placeholder='Enter your password'
-          title='Please enter correct password!'
-          required
-        />
+
+        <label>
+          <span className='email'>EMAIL</span>
+          <input
+            type='email'
+            name='email'
+            value={inputValue.email}
+            onChange={(e) =>
+              setInputValue({
+                ...inputValue,
+                [e.target.name]: e.target.value,
+              })
+            }
+            placeholder='Enter your email'
+            title='Please enter a valid e-mail'
+            required
+          />
+        </label>
+
+        <label>
+          <span className='password'>PASSWORD</span>
+          <input
+            type='password'
+            name='password'
+            value={inputValue.password}
+            onChange={(e) =>
+              setInputValue({
+                ...inputValue,
+                [e.target.name]: e.target.value,
+              })
+            }
+            placeholder='Enter your password'
+            title='Please enter correct password!'
+            required
+          />
+        </label>
+
         <button className='login' type='submit'>
           Log In
         </button>

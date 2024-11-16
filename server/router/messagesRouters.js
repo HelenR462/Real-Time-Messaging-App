@@ -14,7 +14,21 @@ router.get("/messages", async (req, res) => {
   }
 });
 
-router.post("/messages", async (req, res) => {
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: "Forbidden" });
+    req.user = user;
+    next();
+  });
+};
+
+
+router.post("/messages", authenticateToken, async (req, res) => {
   const { chatUser } = req.body;
 
   console.log(req.body)
@@ -26,6 +40,11 @@ router.post("/messages", async (req, res) => {
   res.json({ message: `Chat created for user ${chatUser}` });
 
   try {
+    const user_id = 7;
+    const user_message = `${chatUser} `; 
+
+    console.log("Inserting into DB:", { user_id, user_message });
+
     const newChat = await db.query(
       "INSERT INTO public.messages (user_id, user_message) VALUES ($1, $2) RETURNING *",
       [user_id, user_message]

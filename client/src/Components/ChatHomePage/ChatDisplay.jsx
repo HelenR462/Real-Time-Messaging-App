@@ -6,7 +6,6 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -72,7 +71,8 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
           </ul>
         )}
       </div>
-      </div>
+      <ChatDisplay inputValue={inputValue} chats={chats} />
+    </div>
   );
 }
 

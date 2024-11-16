@@ -79,8 +79,12 @@ function HomePage({ inputValue = {} }) {
       </div>
 
       <div>
-        <ChatDisplay inputValue={inputValue} chats={chats} />
-        <Chats inputValue={inputValue} setChats={setChats} />
+        <ChatDisplay 
+        inputValue={inputValue} 
+        chats={chats} />
+        <Chats 
+        inputValue={inputValue} 
+        setChats={setChats} />
       </div>
     </div>
   );
