@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 async function findUser(user_id) {
   try {
-    const result = await db.query("SELECT * FROM public.users WHERE id = $1", [
+    const result = await db.query("SELECT * FROM public.users WHERE user_id = $1", [
       user_id,
     ]);
     return result.rows[0];
@@ -72,7 +72,7 @@ router.get("/users/:id", async (req, res) => {
   const userId = req.params.id;
 
   try {
-    const result = await db.query("SELECT * FROM public.users WHERE id = $1", [
+    const result = await db.query("SELECT * FROM public.users WHERE user_id = $1", [
       userId,
     ]);
 

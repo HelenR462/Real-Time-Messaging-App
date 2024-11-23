@@ -3,16 +3,23 @@
 
 .new-chat-form{
   margin-top: -9%;
-  margin-left: 37%;
+  margin-left: auto; 
+  margin-right: auto;
+  text-align: center; 
+  width: 90%; 
+  max-width: 600px;
+ 
 }
 
 .chat-input{
- width:500px;
+  width: 100%;
+ max-width:500px;
  border: 1.5px solid rgba(35, 161, 161, 0.952);
  border-radius:15px ;
  background-color: white;
  height:6vh;
-
+ padding: 0 10px; 
+ box-sizing: border-box;
 }
 
 .chat-input[type=text]:focus {
@@ -21,25 +28,40 @@
   box-shadow: 1px 2px rgba(35, 161, 161, 0.952);
 }
 
+
 .send{
-  width:90px;
-  height:6vh;
- border-radius: 15px;
+  width: auto; 
+  min-width: 90px; 
+  padding: 10px 20px; 
+  height: auto; 
+  border-radius: 15px;
   border: none;
   box-shadow: 1px 2px rgba(183, 195, 195, 0.952);
- color:white;
- margin-left: 5px;
- background-color: rgba(35, 161, 161, 0.952);
+  color: white;
+  margin-left: 5px;
+  background-color: rgba(35, 161, 161, 0.952);
   font-weight: 550;
 }
 
 .send:hover{
-background-color: rgba(114, 179, 179, 0.952);
+background-color:  rgba(25, 141, 141, 0.952)
 }
 
+@media (max-width: 768px) {
+  .new-chat-form {
+    margin-top: 0; 
+    padding: 10px;
+    width: 100%; 
+  }
 
-@media screen and (max-width: 600px) {
-  .column {
-    width: 33.33%;
+  .chat-input {
+    max-width: 100%; 
+    height: 5vh; 
+  }
+
+  .send {
+    width: 100%; 
+    margin-top: 10px; 
+    height: auto;
   }
 }

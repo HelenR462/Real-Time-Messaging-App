@@ -14,7 +14,7 @@ async function findUser(email) {
 }
 
 // Login route
-router.post("/LoginRegister/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   console.log("Login request received:", req.body);
   try {
     const { email, password } = req.body;

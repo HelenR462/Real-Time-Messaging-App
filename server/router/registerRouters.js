@@ -14,7 +14,7 @@ async function registerUser(username, email, passwordhush) {
 }
 
 // Define the route for user registration
-router.post("/LoginRegister/register", async (req, res) => {
+router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
   try {

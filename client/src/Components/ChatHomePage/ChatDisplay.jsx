@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../ChatHomePage/ChatDisplay.css";
+import SidebarCard from "./SidebarCard";
 
 function ChatDisplay({ inputValue = {}, chats = [] }) {
   const [messages, setMessages] = useState([]);
@@ -14,7 +15,11 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
       //get all messages
       try {
         const response = await axios.get("/api/messages");
-        setMessages(response.data);
+        if (response.data && Array.isArray(response.data)) {
+          setMessages(response.data);
+        } else {
+          throw new Error("Invalid data format from API");
+        }
       } catch (err) {
         console.error("Error fetching messages:", err);
         setError("Failed to load messages.");
@@ -30,7 +35,9 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
     <div className='chat-display'>
       <div className='chat-users'>
         <h2>Friends</h2>
-        <ul className='side-bar'>
+
+        <SidebarCard/>
+        {/* <ul className='side-bar'>
           <li>
             <img src='../assets/images/sportivo.jpg' alt='sportivo' />
             <h6>BibiTuti</h6>
@@ -43,7 +50,7 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
             <img src='../assets/images/spongebob.jpg' alt='spongebob' />
             <h6>Spongebob</h6>
           </li>
-        </ul>
+        </ul> */}
       </div>
 
       <div className='chat-board'>
@@ -71,7 +78,7 @@ function ChatDisplay({ inputValue = {}, chats = [] }) {
           </ul>
         )}
       </div>
-      <ChatDisplay inputValue={inputValue} chats={chats} />
+      {/* <ChatDisplay inputValue={inputValue} chats={chats} /> */}
     </div>
   );
 }

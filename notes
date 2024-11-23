@@ -31,3 +31,7 @@ For any subsequent requests to protected routes, the frontend includes the token
 The backend verifies the token on each request to ensure the user is authenticated before allowing access to protected resources.
 
 
+ "options": {
+    "allowedHosts": ["localhost", ".localhost"],
+    "proxy": "https://localhost:5000/"
+  }

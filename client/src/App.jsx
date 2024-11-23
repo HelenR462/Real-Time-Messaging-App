@@ -5,7 +5,7 @@ import Register from "./Components/LoginRegister/Register";
 import HomePage from "./Components/HomePage";
 import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
 import Chats from "./Components/ChatHomePage/Chats";
-
+import SidebarCard from "./Components/ChatHomePage/SidebarCard"
 
 function App() {
   const [inputValue, setInputValue] = useState({
@@ -25,6 +25,7 @@ function App() {
           <Route path='/homepage' element={<HomePage inputValue={inputValue}/>} />
           <Route path='/chatdisplay' element={<ChatDisplay />} />
           <Route path='/chats' element={<Chats inputValue={inputValue}/>} />
+          <Route path='/sidebarcard' element={<SidebarCard/>}/>
         </Routes>
       </BrowserRouter>
     </div>

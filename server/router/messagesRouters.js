@@ -15,8 +15,8 @@ router.get("/messages", async (req, res) => {
 });
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) return res.status(401).json({ error: "Unauthorized" });
 
@@ -27,21 +27,18 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-
 router.post("/messages", authenticateToken, async (req, res) => {
   const { chatUser } = req.body;
 
-  console.log(req.body)
+  console.log(req.body);
 
   if (!chatUser) {
     return res.status(400).json({ error: "ChatUser is required" });
   }
 
-  res.json({ message: `Chat created for user ${chatUser}` });
-
   try {
-    const user_id = 7;
-    const user_message = `${chatUser} `; 
+    const user_id = 4;
+    const user_message = `${chatUser} `;
 
     console.log("Inserting into DB:", { user_id, user_message });
 
