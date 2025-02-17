@@ -7,7 +7,7 @@ async function registerUser(username, email, passwordhush) {
  
   
   const result = await db.query(
-    "INSERT INTO public.users (username, email, passwordhush) VALUES ($1, $2, $3) RETURNING *",
+    "INSERT INTO public.users (username, email, passwordhush, image_url) VALUES ($1, $2, $3) RETURNING *",
     [username, email, passwordhush]
   );
   return result.rows[0];

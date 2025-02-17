@@ -2,13 +2,10 @@
 
 
 .new-chat-form{
-  margin-top: -9%;
+  margin-top: -12%;
   margin-left: auto; 
-  margin-right: auto;
   text-align: center; 
-  width: 90%; 
-  max-width: 600px;
- 
+  width: 125vw; 
 }
 
 .chat-input{
@@ -47,9 +44,10 @@
 background-color:  rgba(25, 141, 141, 0.952)
 }
 
+
 @media (max-width: 768px) {
   .new-chat-form {
-    margin-top: 0; 
+    margin: 0; 
     padding: 10px;
     width: 100%; 
   }

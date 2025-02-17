@@ -6,9 +6,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 async function findUser(user_id) {
   try {
-    const result = await db.query("SELECT * FROM public.users WHERE user_id = $1", [
-      user_id,
-    ]);
+    const result = await db.query(
+      "SELECT * FROM public.users WHERE user_id = $1",
+      [user_id]
+    );
     return result.rows[0];
   } catch (error) {
     console.error("Error fetching user from database:", error);
@@ -23,19 +24,21 @@ router.get("/users", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      const user = await findUser(decoded.user_id);
-      if (user) {
-        res.json({ user });
-      } else {
-        res.status(404).json({ error: "User not found" });
-      }
-    } catch (error) {
-      return res.status(401).json({ error: "Invalid or expired token" });
+    const loggedInUserId = parseInt(req.user_id, 10);
+
+    if (!req.user || isNaN(req.user.id)) {
+      return res.status(400).json({ error: "Invalid user ID" });
     }
+    // fetch all users except the logged-in user
+    const result = await db.query(
+      "SELECT * FROM public.users WHERE user_id != $1",
+      [loggedInUserId]
+    );
+    console.log("Received userId:", typeof loggedInUserId, loggedInUserId);
+
+    res.json(result.rows);
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.error("Error fetching users:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -68,12 +71,13 @@ router.post("/users", async (req, res) => {
   }
 });
 
-router.get("/users/:id", async (req, res) => {
-  const userId = req.params.id;
+router.get("/user/:id", async (req, res) => {
+  const user_id = req.params.id;
+  console.log("Received userId:", req.params.id);
 
   try {
-    const result = await db.query("SELECT * FROM public.users WHERE user_id = $1", [
-      userId,
+    const result = await db.query("SELECT * FROM users WHERE user_id = $1", [
+      user_id,
     ]);
 
     if (result.rows.length === 0) {

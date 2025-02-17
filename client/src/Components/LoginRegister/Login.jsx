@@ -11,7 +11,7 @@ function Login({ inputValue = {}, setInputValue }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post("api/login", inputValue);
+      const response = await axios.post("/api/login", inputValue);
       setMessage("Login successful!");
       const token = response.data.token;
 

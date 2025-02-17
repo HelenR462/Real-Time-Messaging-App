@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const path = require("path");
 const { Pool } = require("pg");
 const loginRoutes = require("./router/loginRouters");
 const registerRoutes = require("./router/registerRouters");
@@ -11,7 +12,12 @@ require("dotenv").config();
 
 const port = 5000;
 
-app.use(cors({ origin: "http://localhost:3000/" }));
+app.use(cors({ origin: "http://localhost:3000" }));
+
+// app.use(
+//   "/assets/images",
+//   express.static(path.join(__dirname, "public/assets/images"))
+// );
 
 app.use(express.json());
 app.use("/api", loginRoutes);

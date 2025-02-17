@@ -3,13 +3,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
+import ChatCard from "./ChatHomePage/ChatCard";
 
 function HomePage({ inputValue = {} }) {
-  const [user, setUser] = useState(inputValue.username || "");
-  const [chats, setChats] = useState([]);
+  const [user, setUser] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [chats] = useState([]);
+  const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
-
-  console.log("inputValue:", inputValue);
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
@@ -27,64 +28,79 @@ function HomePage({ inputValue = {} }) {
       return;
     }
 
-    //get all users
     const fetchUserData = async () => {
       try {
-        const allUsers = await axios.get("/api/users", {
+        // get all users
+        const response = await axios.get("/api/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("All users:", allUsers.data);
+        // console.log("API Response:", response.data);
+        //  console.log(" users:", response.data);
+        if (response.data && Array.isArray(response.data)) {
+   
+          //get single user
+          const singleUserId =  `SELECT * FROM public.users WHERE user_id != $1`;
+          
+          const singleUserResponse = await axios.get(
+            `/api/user/${singleUserId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
 
-        // get a single user
-        const singleUserId = "7";
-        const singleUser = await axios.get(`/api/users/${singleUserId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log("Single user:", singleUser.data);
+          console.log("Single user:", singleUserResponse.data);
+          setUser(singleUserResponse.data);
 
-        // create a new user
-        const response = await axios.post(
-          "/api/users",
-          { username: inputValue?.username },
-          {
+          const createUserResponse = await axios.post("/api/users", {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-          }
-        );
+          });
 
-        if (response.data && response.data.user) {
-          setUser(response.data.user);
-        } else {
-          console.log("User data not found in response");
+         
+          setUser(createUserResponse.data);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
         if (error.response && error.response.status === 401) {
           console.log("Token expired or invalid. Logging out...");
-          // handleLogout();
+          handleLogout();
         }
       }
     };
 
     fetchUserData();
-  }, [handleLogout, inputValue?.username]);
+  }, [handleLogout, inputValue?.username, setUsers]);
 
   return (
     <div className='home-page'>
       <div>
-        {user ? <h1> Welcome, {inputValue?.username} </h1> : <p>Loading...</p>}
-        <button className="logout" onClick={handleLogout}>Log Out</button>
+        {user ? (
+          <>
+            <h1>Welcome, {user.username}</h1>
+            {user.img && (
+              <img src={user.img} alt={user.username} className='profile-pic' />
+            )}
+          </>
+        ) : (
+          <p>Loading...</p>
+        )}
+        <button className='logout' onClick={handleLogout}>
+          Log Out
+        </button>
       </div>
 
       <div>
-        <ChatDisplay 
-        inputValue={inputValue} 
-        chats={chats} />
-        <Chats 
-        inputValue={inputValue} 
-        setChats={setChats} />
+        <ChatDisplay
+          inputValue={inputValue}
+          chats={chats}
+          messages={messages}
+          setMessages={setMessages}
+        />
+        <Chats inputValue={inputValue} setChats={setMessages} />
+
+        <ChatCard users={users} />
       </div>
     </div>
   );

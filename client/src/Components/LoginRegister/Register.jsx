@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./LoginRegister.css"
+import "./LoginRegister.css";
 
-function Register({inputValue, setInputValue}) {
-  
+function Register({ inputValue, setInputValue }) {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
- const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -37,52 +36,47 @@ function Register({inputValue, setInputValue}) {
   };
 
   return (
-    <div className="login-register-table">
-      <form className="register" onSubmit={handleSubmit}>
+    <div className='login-register-table'>
+      <form className='register' onSubmit={handleSubmit}>
         <h1>Register</h1>
         <label>
-        <span className='username' >
-            USERNAME
-          </span>
+          <span className='username'>USERNAME</span>
           <input
-            type="text"
+            type='text'
             name='username'
             value={inputValue.username}
             onChange={handleOnChange}
-            placeholder="Enter your username"
+            placeholder='Enter your username'
           />
         </label>
 
         <label>
-        <span className='email' >
-            EMAIL
-          </span>
+          <span className='email'>EMAIL</span>
           <input
-            type="email"
+            type='email'
             name='email'
             value={inputValue.email}
             onChange={handleOnChange}
-            placeholder="Enter your email"
+            placeholder='Enter your email'
             title='Please enter a valid e-mail'
             required
           />
         </label>
 
         <label>
-        <span className='password' >
-            PASSWORD
-          </span>
+          <span className='password'>PASSWORD</span>
           <input
-            type="password"
+            type='password'
             name='password'
             value={inputValue.password}
             onChange={handleOnChange}
-            placeholder="Enter your password"
+            placeholder='Enter your password'
           />
         </label>
 
-        <button className="register" type="submit">Register</button>
-        
+        <button className='register' type='submit'>
+          Register
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>

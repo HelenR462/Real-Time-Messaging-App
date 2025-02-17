@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 router.get("/messages", async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM public.messages");
+    const result = await db.query(`SELECT * FROM public.messages`);
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching messages:", error);
@@ -31,23 +31,28 @@ router.post("/messages", authenticateToken, async (req, res) => {
   const { chatUser } = req.body;
 
   console.log(req.body);
+  console.log("Sending request with data:", { chatUser });
 
   if (!chatUser) {
     return res.status(400).json({ error: "ChatUser is required" });
   }
 
   try {
-    const user_id = 4;
-    const user_message = `${chatUser} `;
+    const user_id = req.user.id;
 
-    console.log("Inserting into DB:", { user_id, user_message });
+    console.log("Inserting into DB:", { user_id, chatUser });
 
     const newChat = await db.query(
-      "INSERT INTO public.messages (user_id, user_message) VALUES ($1, $2) RETURNING *",
-      [user_id, user_message]
+      "INSERT INTO messages (user_id, user_message) VALUES ($1, $2) RETURNING *",
+      [user_id, chatUser]
     );
     res.status(201).json(newChat.rows[0]);
   } catch (error) {
+    setError(
+      error.response?.data?.error || "Error creating chat. Please try again."
+    );
+    console.error("Error creating chat:", error.response?.data || error);
+
     console.error("Error creating chat:", error);
     res.status(500).json({ error: "Internal server error" });
   }
