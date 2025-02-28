@@ -6,8 +6,6 @@ import HomePage from "./Components/HomePage";
 import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
 import Chats from "./Components/ChatHomePage/Chats";
 import ChatUsers from "./Components/ChatHomePage/ChatUsers";
-// import ChatCard from "./Components/ChatHomePage/ChatCard";
-
 
 function App() {
   const [inputValue, setInputValue] = useState({
@@ -39,8 +37,6 @@ function App() {
           <Route path='/chat_display' element={<ChatDisplay />} />
           <Route path='/chats' element={<Chats inputValue={inputValue} />} />
           <Route path='/Chat_users' element={<ChatUsers />} />
-          {/* <Route path='/chat_display_card' element={<ChatCard />} /> */}
-      
         </Routes>
       </BrowserRouter>
     </div>

@@ -3,11 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
-import ChatCard from "./ChatHomePage/ChatCard";
+// import ChatUsers from "./ChatHomePage/ChatUsers";
 
 function HomePage({ inputValue = {} }) {
   const [user, setUser] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [setUsers] = useState([]);
   const [chats] = useState([]);
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
@@ -32,33 +32,35 @@ function HomePage({ inputValue = {} }) {
       try {
         // get all users
         const response = await axios.get("/api/users", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            },
+         
         });
-        // console.log("API Response:", response.data);
-        //  console.log(" users:", response.data);
+
         if (response.data && Array.isArray(response.data)) {
-   
           //get single user
-          const singleUserId =  `SELECT * FROM public.users WHERE user_id != $1`;
-          
+          const singleUserId = `SELECT * FROM public.users WHERE user_id != $1`;
+
           const singleUserResponse = await axios.get(
             `/api/user/${singleUserId}`,
             {
               headers: { Authorization: `Bearer ${token}` },
+              params: {
+                user_id:"1"
+              },
             }
           );
 
           console.log("Single user:", singleUserResponse.data);
           setUser(singleUserResponse.data);
 
-          const createUserResponse = await axios.post("/api/users", {
+          const createUserResponse = await axios.post("/api/users", {}, {
             headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
             },
           });
 
-         
           setUser(createUserResponse.data);
         }
       } catch (error) {
@@ -100,7 +102,7 @@ function HomePage({ inputValue = {} }) {
         />
         <Chats inputValue={inputValue} setChats={setMessages} />
 
-        <ChatCard users={users} />
+        {/* <ChatUsers user={user} /> */}
       </div>
     </div>
   );

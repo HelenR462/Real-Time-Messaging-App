@@ -14,10 +14,10 @@ const port = 5000;
 
 app.use(cors({ origin: "http://localhost:3000" }));
 
-// app.use(
-//   "/assets/images",
-//   express.static(path.join(__dirname, "public/assets/images"))
-// );
+app.use(
+  "/assets/images",
+  express.static(path.join(__dirname, "public/assets/images"))
+);
 
 app.use(express.json());
 app.use("/api", loginRoutes);

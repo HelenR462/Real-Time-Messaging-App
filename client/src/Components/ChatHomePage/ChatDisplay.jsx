@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../ChatHomePage/ChatDisplay.css";
-import ChatCard from "./ChatCard";
+import ChatUsers from "./ChatUsers";
 
 function ChatDisplay({
   inputValue = {},
@@ -12,7 +12,7 @@ function ChatDisplay({
 }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   useEffect(() => {
     const fetchMessages = async () => {
       setLoading(true);
@@ -21,11 +21,11 @@ function ChatDisplay({
       try {
         const response = await axios.get("/api/messages");
         if (response.data && Array.isArray(response.data)) {
-        console.log("Fetched messages:", response.data);
-        setMessages(response.data);
+          // console.log("Fetched messages:", response.data);
+          setMessages(response.data);
         } else {
           throw new Error("Invalid data format from API");
-         }
+        }
       } catch (err) {
         console.error("Error fetching messages:", err);
         setError("Failed to load messages.");
@@ -37,24 +37,16 @@ function ChatDisplay({
     fetchMessages();
   }, [inputValue?.username, setMessages]);
 
- 
   return (
     <div className='chat-display'>
       <div className='chat-users'>
         <h2>Friends</h2>
 
-        <ChatCard  />
+        <ChatUsers/>
       </div>
 
       <div className='chat-board'>
         <h2>Your Chats</h2>
-
-        <ul>
-          {messages.map((chat) => (
-            <li key={`${chat.id}`}></li>
-          ))}
-        </ul>
-        <h3>Messages:</h3>
         {loading ? (
           <p>Loading messages...</p>
         ) : error ? (
@@ -63,8 +55,8 @@ function ChatDisplay({
           <p>No messages available.</p>
         ) : (
           <ul className='messages-list'>
-            {messages.map((message) => (
-              <li key={message.id} className='chat-card'>
+            {messages.map((message, index) => (
+              <li key={message.id || `msg-${index}`} className='chat-card'>
                 {selectedUser && (
                   <img
                     src={selectedUser.img}
