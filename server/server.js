@@ -16,14 +16,15 @@ app.use(cors({ origin: "http://localhost:3000" }));
 
 app.use(
   "/assets/images",
-  express.static(path.join(__dirname, "public/assets/images"))
+  express.static(path.join(__dirname, "../public/assets/images"))
 );
 
 app.use(express.json());
 app.use("/api", loginRoutes);
 app.use("/api", registerRoutes);
 app.use("/api", messagesRoutes);
-app.use("/api", usersRoutes);
+// app.use("/api", usersRoutes);
+app.use("/api", require("./router/usersRouters"));
 
 const pool = new Pool({
   user: process.env.USER,

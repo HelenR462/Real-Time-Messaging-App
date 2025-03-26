@@ -58,7 +58,7 @@ function ChatDisplay({
               <li key={message.id || `msg-${index}`} className='chat-card'>
                 {selectedUser && (
                   <img
-                    src={selectedUser.img}
+                    src={selectedUser.imge_url}
                     alt={selectedUser.username}
                     className='chat-card-image'
                   />
