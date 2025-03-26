@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
-// import ChatUsers from "./ChatHomePage/ChatUsers";
 
 function HomePage({ inputValue = {} }) {
   const [user, setUser] = useState(null);
@@ -34,8 +33,7 @@ function HomePage({ inputValue = {} }) {
         const response = await axios.get("/api/users", {
           headers: {
             Authorization: `Bearer ${token}`,
-            },
-         
+          },
         });
 
         if (response.data && Array.isArray(response.data)) {
@@ -47,21 +45,29 @@ function HomePage({ inputValue = {} }) {
             {
               headers: { Authorization: `Bearer ${token}` },
               params: {
-                user_id:"1"
+                user_id: "user_id"
               },
             }
           );
 
-          console.log("Single user:", singleUserResponse.data);
+          // console.log("Single user:", singleUserResponse.data);
           setUser(singleUserResponse.data);
 
-          const createUserResponse = await axios.post("/api/users", {}, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          });
+          if (!inputValue.username) {
+            console.error("Username is missing!");
+            return; 
+          }
+          const createUserResponse = await axios.post(
+            "/api/users",
+            { username: inputValue.username },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
-          setUser(createUserResponse.data);
+         setUser(createUserResponse.data);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -73,7 +79,7 @@ function HomePage({ inputValue = {} }) {
     };
 
     fetchUserData();
-  }, [handleLogout, inputValue?.username, setUsers]);
+  }, [handleLogout, inputValue?.username, setUsers, inputValue]);
 
   return (
     <div className='home-page'>
@@ -101,8 +107,6 @@ function HomePage({ inputValue = {} }) {
           setMessages={setMessages}
         />
         <Chats inputValue={inputValue} setChats={setMessages} />
-
-        {/* <ChatUsers user={user} /> */}
       </div>
     </div>
   );

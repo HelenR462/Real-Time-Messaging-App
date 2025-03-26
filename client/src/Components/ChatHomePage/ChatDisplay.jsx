@@ -21,7 +21,6 @@ function ChatDisplay({
       try {
         const response = await axios.get("/api/messages");
         if (response.data && Array.isArray(response.data)) {
-          // console.log("Fetched messages:", response.data);
           setMessages(response.data);
         } else {
           throw new Error("Invalid data format from API");
@@ -42,7 +41,7 @@ function ChatDisplay({
       <div className='chat-users'>
         <h2>Friends</h2>
 
-        <ChatUsers/>
+        <ChatUsers />
       </div>
 
       <div className='chat-board'>
@@ -60,13 +59,13 @@ function ChatDisplay({
                 {selectedUser && (
                   <img
                     src={selectedUser.img}
-                    alt={selectedUser.name}
+                    alt={selectedUser.username}
                     className='chat-card-image'
                   />
                 )}
                 <div className='chat-card-content'>
                   <p className='chat-username'>
-                    {selectedUser?.name || inputValue?.username}
+                    {selectedUser?.username || inputValue?.username}
                   </p>
                   <p className='chat-message'>{message.user_message}</p>
                 </div>
