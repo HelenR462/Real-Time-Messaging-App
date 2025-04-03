@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
 
-function HomePage({ inputValue = {} }) {
+function HomePage({ inputValue = {}, loggedInUser }) {
   const [user, setUser] = useState(null);
   const [setUsers] = useState([]);
   const [chats] = useState([]);
@@ -45,7 +45,7 @@ function HomePage({ inputValue = {} }) {
             {
               headers: { Authorization: `Bearer ${token}` },
               params: {
-                user_id: "user_id"
+                user_id: "singleUserId",
               },
             }
           );
@@ -55,7 +55,7 @@ function HomePage({ inputValue = {} }) {
 
           if (!inputValue.username) {
             console.error("Username is missing!");
-            return; 
+            return;
           }
           const createUserResponse = await axios.post(
             "/api/users",
@@ -67,7 +67,7 @@ function HomePage({ inputValue = {} }) {
             }
           );
 
-         setUser(createUserResponse.data);
+          setUser(createUserResponse.data);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);

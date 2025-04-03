@@ -11,19 +11,26 @@ function Register({ inputValue, setInputValue }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post("api/register", inputValue);
+      const response = await axios.post(
+        "/api/register",
+        inputValue
+      );
 
       if (response.status === 201) {
         setMessage(response.data.message);
-        console.log("Navigating to LoginPage");
+        setInputValue({ username: "", email: "", password: "" });
+        // console.log("Navigating to LoginPage");
         navigate("/");
       }
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        setMessage("Email already registered. Try Logging in.");
-      } else {
-        setMessage("Error registering. Please try again.");
-      }
+      setMessage(
+        error.response?.data?.message || "Error registering. Please try again."
+      );
+      // if (error.response && error.response.status === 409) {
+      //   setMessage("Email already registered. Try Logging in.");
+      // } else {
+      //   setMessage("Error registering. Please try again.");
+      // }
     }
   };
 
@@ -31,7 +38,9 @@ function Register({ inputValue, setInputValue }) {
     const { name, value } = e.target;
     setInputValue((prevState) => ({
       ...prevState,
-      [name]: value,
+      // [name]:  value,
+      [name]:
+        name === "username" || name === "email" ? value.toLowerCase() : value,
     }));
   };
 
@@ -47,6 +56,7 @@ function Register({ inputValue, setInputValue }) {
             value={inputValue.username}
             onChange={handleOnChange}
             placeholder='Enter your username'
+            required
           />
         </label>
 
@@ -71,6 +81,8 @@ function Register({ inputValue, setInputValue }) {
             value={inputValue.password}
             onChange={handleOnChange}
             placeholder='Enter your password'
+            minLength={6}
+            required
           />
         </label>
 
