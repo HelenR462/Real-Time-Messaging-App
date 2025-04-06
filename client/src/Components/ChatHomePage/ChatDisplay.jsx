@@ -3,13 +3,7 @@ import axios from "axios";
 import "../ChatHomePage/ChatDisplay.css";
 import ChatUsers from "./ChatUsers";
 
-function ChatDisplay({
-  inputValue = {},
-  chats = [],
-  selectedUser,
-  messages,
-  setMessages,
-}) {
+function ChatDisplay({ inputValue = {}, selectedUser, messages, setMessages }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -58,9 +52,11 @@ function ChatDisplay({
               <li key={message.id || `msg-${index}`} className='chat-card'>
                 {selectedUser && (
                   <img
-                    src={selectedUser.imge_url}
-                    alt={selectedUser.username}
-                    className='chat-card-image'
+                    src={
+                      selectedUser?.image_url ||
+                      "http://localhost:5000/assets/images/default.png"
+                    }
+                    alt={selectedUser?.username || inputValue?.username}
                   />
                 )}
                 <div className='chat-card-content'>

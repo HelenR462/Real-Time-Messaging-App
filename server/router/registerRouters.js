@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const db = require("../db");
 
 async function registerUser(username, email, passwordhush) {
-  const defaultImageURL = "/public/assets/images/default.png"
+  const defaultImageURL = "/public/assets/images/default.png";
 
   const result = await db.query(
     "INSERT INTO public.users (username, email, passwordhush, image_url) VALUES ($1, $2, $3, $4) RETURNING *",
@@ -23,12 +23,8 @@ router.post("/register", async (req, res) => {
   try {
     // Check if user with this email already exists
     const existingUser = await db.query(
-      // "SELECT * FROM public.users WHERE (username, email) = $1 ,$2",
-      // (LOWER(username, email) = LOWER($1, $2)),
-      // [username, email]
-
        "SELECT * FROM public.users WHERE LOWER(email) = LOWER($1) OR    LOWER(username) = LOWER($2)",
-       [email, username]
+      [email, username]
     );
 
     if (existingUser.rows.length > 0) {

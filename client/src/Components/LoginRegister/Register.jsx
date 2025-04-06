@@ -19,18 +19,13 @@ function Register({ inputValue, setInputValue }) {
       if (response.status === 201) {
         setMessage(response.data.message);
         setInputValue({ username: "", email: "", password: "" });
-        // console.log("Navigating to LoginPage");
         navigate("/");
       }
     } catch (error) {
       setMessage(
         error.response?.data?.message || "Error registering. Please try again."
       );
-      // if (error.response && error.response.status === 409) {
-      //   setMessage("Email already registered. Try Logging in.");
-      // } else {
-      //   setMessage("Error registering. Please try again.");
-      // }
+    
     }
   };
 

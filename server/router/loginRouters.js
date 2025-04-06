@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const db = require("../db");
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Define findUser
 async function findUser(email) {
   const result = await db.query("SELECT * FROM public.users WHERE email = $1", [
     email,
@@ -13,7 +12,6 @@ async function findUser(email) {
   return result.rows;
 }
 
-// Login route
 router.post("/login", async (req, res) => {
   console.log("Login request received:", req.body);
   try {
@@ -24,16 +22,16 @@ router.post("/login", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Verify password
     const passwordIsMatch = await bcrypt.compare(password, user.passwordhush);
     if (!passwordIsMatch) {
       return res.status(400).json({ message: "Invalid password!" });
     }
 
-    // Generate token using the correct `user_id`
-    const token = jwt.sign({ email: user.email }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { user_id: user.user_id, username: user.username },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.json({ message: "Login successful!", token });
   } catch (error) {

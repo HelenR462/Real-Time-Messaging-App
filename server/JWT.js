@@ -17,10 +17,9 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// Generate a JWT token for the new user
 
 const generateToken = (req, res) => {
-  const user = req.user; // Make sure `user` is available here, e.g., from a login middleware
+  const user = req.user; 
 
   if (!user) {
     return res.status(400).json({ msg: "User not provided" });
