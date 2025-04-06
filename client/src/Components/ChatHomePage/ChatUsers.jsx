@@ -25,10 +25,11 @@ const ChatUsers = () => {
           ? response.data
           : response.data.users || [response.data];
 
-          const prevUsers = prevUsersRef.current;
+       const prevUsers =   prevUsersRef.current ;
        
         if (JSON.stringify(newUsers) !== JSON.stringify(prevUsers)) {
           setRemainingUsers(newUsers);
+          
         }
       } catch (err) {
         console.error("Error fetching users:", err);
@@ -49,18 +50,11 @@ const ChatUsers = () => {
           // console.log("Image URL:", imageUrl);
 
           return (
-            <div key={user.id} className='user'>
+            <div key={user.user_id} className='user'>
               <img
                 src={imageUrl}
                 alt={user.username}
-                onError={(e) => {
-                  console.warn(`Image not found: ${user.imageUrl}`);
-                  if (e.target.src !== imageUrl) {
-                    e.target.src = 
-                      "http://localhost:5000/public/assets/images/default.png";
-                    e.target.onerror = null;
-                  }
-                }}
+              
               />
               <p>{user.username}</p>
             </div>

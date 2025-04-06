@@ -28,10 +28,15 @@ const authenticateToken = (req, res, next) => {
 };
 
 router.post("/messages", authenticateToken, async (req, res) => {
+  const user_id = req.user.user_id;
   const { chatUser } = req.body;
 
-  console.log(req.body);
-  console.log("Sending request with data:", { chatUser });
+  // console.log(req.body);
+  // console.log("Sending request with data:", { chatUser });
+
+  console.log("Logged-in user ID:", user_id);
+  console.log("Inserting into DB:", { user_id, chatUser });
+
 
   if (!chatUser) {
     return res.status(400).json({ error: "ChatUser is required" });
