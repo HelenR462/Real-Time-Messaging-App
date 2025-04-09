@@ -18,22 +18,30 @@ router.get("/users", async (req, res) => {
       console.log("Logged-in user ID:", loggedInUserId);
 
       const result = await db.query(
-        "SELECT user_id, username, image_url FROM public.users WHERE user_id != $1",
+        "SELECT user_id, username, image_url FROM public.users WHERE user_id IS NOT NULL AND user_id != $1",
         [loggedInUserId]
       );
 
-      const baseImagePath = "http://localhost:5000/assets/images/";
       const defaultImage = "default.png";
 
-      const usersWithImages = result.rows.map((user) => ({
-        ...user,
-        image_url: user.image_url
-          ? `${baseImagePath}${user.image_url}`
-          : `${baseImagePath}${defaultImage}`,
-      }));
+      console.log("Raw DB users:", result.rows);
+
+      const usersWithImages = result.rows.map((user) => {
+        const fileName = user.image_url?.trim();
+        const isValid =
+          fileName && !fileName.includes("/") && fileName.includes(".png");
+
+        return {
+          ...user,
+          image_url: isValid
+            ? `/public/assets/images/${fileName}`
+            : `/public/assets/images/${defaultImage}`,
+        };
+      });
 
       res.json(usersWithImages);
     } catch (err) {
+      console.error("JWT verification failed:", err.message);
       return res.status(401).json({ error: "Unauthorized: Invalid token" });
     }
   } catch (error) {

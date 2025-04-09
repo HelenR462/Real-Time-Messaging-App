@@ -22,7 +22,6 @@ function Chats({ inputValue = {}, setChats }) {
       return;
     }
 
-    // create a chat messages
     try {
       const response = await axios.post(
         "/api/messages",
@@ -45,6 +44,7 @@ function Chats({ inputValue = {}, setChats }) {
   };
 
   const handleUserChange = (e) => {
+    e.preventDefault();
     setChatUser(e.target.value);
     setError(null);
   };
@@ -52,7 +52,7 @@ function Chats({ inputValue = {}, setChats }) {
   return (
     <form onSubmit={handleCreateChat} className='new-chat-form'>
       <label>
-        {inputValue?.username || "Username"}:
+        {inputValue?.username || ""}: 
         <input
           type='text'
           className='chat-input'

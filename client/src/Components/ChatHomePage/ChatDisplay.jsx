@@ -52,10 +52,7 @@ function ChatDisplay({ inputValue = {}, selectedUser, messages, setMessages }) {
               <li key={message.id || `msg-${index}`} className='chat-card'>
                 {selectedUser && (
                   <img
-                    src={
-                      selectedUser?.image_url ||
-                      "http://localhost:5000/assets/images/default.png"
-                    }
+                    src={selectedUser?.image_url || "default.png"}
                     alt={selectedUser?.username || inputValue?.username}
                   />
                 )}

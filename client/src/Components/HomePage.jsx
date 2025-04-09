@@ -43,8 +43,8 @@ function HomePage({ inputValue = {} }) {
         {user ? (
           <>
             <h1>Welcome, {user.username}</h1>
-            {user.img && (
-              <img src={user.img} alt={user.username} className='profile-pic' />
+            {user.image_url && (
+              <img src={user.image_url} alt={user.username} className='profile-pic' />
             )}
           </>
         ) : (

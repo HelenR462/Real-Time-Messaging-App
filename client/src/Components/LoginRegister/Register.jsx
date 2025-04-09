@@ -11,10 +11,7 @@ function Register({ inputValue, setInputValue }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "/api/register",
-        inputValue
-      );
+      const response = await axios.post("/api/register", inputValue);
 
       if (response.status === 201) {
         setMessage(response.data.message);
@@ -25,7 +22,6 @@ function Register({ inputValue, setInputValue }) {
       setMessage(
         error.response?.data?.message || "Error registering. Please try again."
       );
-    
     }
   };
 
@@ -33,7 +29,7 @@ function Register({ inputValue, setInputValue }) {
     const { name, value } = e.target;
     setInputValue((prevState) => ({
       ...prevState,
-      // [name]:  value,
+      [name]:  value,
       [name]:
         name === "username" || name === "email" ? value.toLowerCase() : value,
     }));
@@ -84,6 +80,13 @@ function Register({ inputValue, setInputValue }) {
         <button className='register' type='submit'>
           Register
         </button>
+
+        {/* <p>
+          Already have an account? 
+          <Link className='login' to='/'> 
+            Log in
+          </Link>
+        </p> */}
       </form>
       {message && <p>{message}</p>}
     </div>

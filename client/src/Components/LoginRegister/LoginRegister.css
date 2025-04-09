@@ -19,6 +19,10 @@ label{
  
 }
 
+.login,.register{
+  color:rgba(35, 161, 161, 0.952); 
+}
+
 /* .login-register-table input[type="email"], [type="password"]{
 
 

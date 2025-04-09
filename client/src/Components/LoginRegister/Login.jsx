@@ -94,6 +94,13 @@ function Login({ inputValue = {}, setInputValue }) {
         <button className='login' type='submit'>
           Log In
         </button>
+
+        {/* <p>
+          You have no account?{" "}
+          <Link className="register" to="/register"> 
+            Register
+          </Link>
+        </p> */}
       </form>
       {message && <p>{message}</p>}
     </div>

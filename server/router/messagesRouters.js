@@ -28,15 +28,17 @@ const authenticateToken = (req, res, next) => {
 };
 
 router.post("/messages", authenticateToken, async (req, res) => {
-  const user_id = req.user.user_id;
+  const user_id = req.loggedInUser.user_id;
   const { chatUser } = req.body;
 
-  // console.log(req.body);
-  // console.log("Sending request with data:", { chatUser });
+  // ~~~~~~~~~~~~~~~~~~
+  console.log(req.body);
+  console.log("Sending request with data:", { chatUser });
 
   console.log("Logged-in user ID:", user_id);
   console.log("Inserting into DB:", { user_id, chatUser });
 
+  // ~~~~~~~~~~~~~~~~
 
   if (!chatUser) {
     return res.status(400).json({ error: "ChatUser is required" });
@@ -49,7 +51,7 @@ router.post("/messages", authenticateToken, async (req, res) => {
 
     const newChat = await db.query(
       "INSERT INTO messages (user_id, user_message) VALUES ($1, $2) RETURNING *",
-      [user_id, chatUser]
+      [loggedInUser.user_id, chatUser]
     );
     res.status(201).json(newChat.rows[0]);
   } catch (error) {

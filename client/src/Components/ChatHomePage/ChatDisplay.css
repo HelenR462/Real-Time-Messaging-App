@@ -29,16 +29,16 @@ background-color: aquamarine;
 
  
 .side-bar{
-  list-style: none;
-  
+  list-style:none;
+
 } 
 
 img{
   height:50px;
   width:50px;
   border-radius: 50%;
-  border:1px solid #23a1a1f3 ;
-  margin:15px 0 0 20px;
+  /* border:1px solid #23a1a1f3 ; */
+  margin:25px 0 0 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,6 +55,7 @@ li{
 .chat-display h6,h3,h2, p{
   color:rgba(77, 76, 76, 0.952);
   margin-left: 25px;
+  font-size: small;
 }
 .chat-board{
   border: 1px #23a1a1f3 solid ;
@@ -100,7 +101,7 @@ li{
 .chat-message {
   margin: 0;
   font-size: 14px;
-  color: #555;
+  color: #14bdbdf3;
 }
 
 .messages-list{
@@ -108,6 +109,6 @@ li{
   padding-bottom: 50px;
   overflow-y: scroll;
   display:flex;
-  flex-direction:column;
+  flex-direction:column-reverse;
  
 }

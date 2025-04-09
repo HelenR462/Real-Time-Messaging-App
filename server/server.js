@@ -14,16 +14,12 @@ const port = 5000;
 
 app.use(cors({ origin: "http://localhost:3000" }));
 
-app.use(
-  "/assets/images",
-  express.static(path.join(__dirname, "../public/assets/images"))
-);
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use(express.json());
 app.use("/api", loginRoutes);
 app.use("/api", registerRoutes);
 app.use("/api", messagesRoutes);
-// app.use("/api", usersRoutes);
 app.use("/api", require("./router/usersRouters"));
 
 const pool = new Pool({
