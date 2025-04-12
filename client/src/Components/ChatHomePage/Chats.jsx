@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Chats.css";
 
-function Chats({ inputValue = {}, setChats }) {
+function Chats({ inputValue = {}, setChats, messages, setMessages }) {
   const [chatUser, setChatUser] = useState("");
+  // const [newMessage, setNewMessage] = useState();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -43,16 +44,37 @@ function Chats({ inputValue = {}, setChats }) {
     }
   };
 
+  const newUser = localStorage.getItem("user");
+
+  let storedUser = null;
+  try {
+    if (newUser && newUser !== "undefined") {
+      storedUser = JSON.parse(newUser);
+    }
+  } catch (err) {
+    console.error("Failed to parse user from localStorage:", err);
+  }
+  
+
+  const loggedInUsername = storedUser?.username || "";
+
   const handleUserChange = (e) => {
     e.preventDefault();
     setChatUser(e.target.value);
     setError(null);
   };
 
+  // const handleSendMessage = () => {
+  //   const newMessages = [...messages, { user: "You", text: newMessage }];
+  //   const limitedMessages = newMessages.slice(-10);
+  //   setMessages(limitedMessages);
+  //   setNewMessage("");
+  // };
+
   return (
     <form onSubmit={handleCreateChat} className='new-chat-form'>
       <label>
-        {inputValue?.username || ""}: 
+        {loggedInUsername}:
         <input
           type='text'
           className='chat-input'

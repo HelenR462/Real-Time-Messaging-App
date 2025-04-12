@@ -29,6 +29,7 @@ const ChatUsers = () => {
 
         if (JSON.stringify(newUsers) !== JSON.stringify(prevUsers)) {
           setRemainingUsers(newUsers);
+          prevUsersRef.current = newUsers;
         }
       } catch (err) {
         console.error("Error fetching users:", err);
@@ -42,16 +43,18 @@ const ChatUsers = () => {
     <div className='user-list'>
       {remainingUsers.length > 0 ? (
         remainingUsers.map((user) => {
-          console.log("User Image URL: ", user.image_url);
-
           return (
-            <div key={remainingUsers.user_id} className='user'>
+            <div key={user.user_id} className='user'>
               <img
-                src={`http://localhost:5000/public/assets/images/${
-                  user.username.png || "default.png"
-                }`}
+                src={`http://localhost:5000/public/assets/images${
+                  user.image_url }`}
                 alt={user.username}
+                onError={(e) =>
+                  (e.target.src =
+                    "http://localhost:5000/public/assets/images/default.png")
+                }
               />
+
               <p>{user.username}</p>
             </div>
           );

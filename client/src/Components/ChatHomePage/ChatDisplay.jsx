@@ -3,6 +3,7 @@ import axios from "axios";
 import "../ChatHomePage/ChatDisplay.css";
 import ChatUsers from "./ChatUsers";
 
+
 function ChatDisplay({ inputValue = {}, selectedUser, messages, setMessages }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -48,7 +49,7 @@ function ChatDisplay({ inputValue = {}, selectedUser, messages, setMessages }) {
           <p>No messages available.</p>
         ) : (
           <ul className='messages-list'>
-            {messages.map((message, index) => (
+            {[...messages].reverse().map((message, index) => (
               <li key={message.id || `msg-${index}`} className='chat-card'>
                 {selectedUser && (
                   <img

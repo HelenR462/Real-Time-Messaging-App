@@ -4,19 +4,9 @@ const jwt = require("jsonwebtoken");
 const db = require("../db");
 const JWT_SECRET = process.env.JWT_SECRET;
 
-router.get("/messages", async (req, res) => {
-  try {
-    const result = await db.query(`SELECT * FROM public.messages`);
-    res.json(result.rows);
-  } catch (error) {
-    console.error("Error fetching messages:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+const verifyToken = (req, res, next) => {
+  const token =
+    req.cookies?.authToken || req.headers["authorization"]?.split(" ")[1];
 
   if (!token) return res.status(401).json({ error: "Unauthorized" });
 
@@ -27,39 +17,35 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-router.post("/messages", authenticateToken, async (req, res) => {
-  const user_id = req.loggedInUser.user_id;
-  const { chatUser } = req.body;
+router.get("/messages", async (req, res) => {
+  try {
+    const result = await db.query(`SELECT * FROM public.messages`);
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
-  // ~~~~~~~~~~~~~~~~~~
-  console.log(req.body);
-  console.log("Sending request with data:", { chatUser });
-
-  console.log("Logged-in user ID:", user_id);
-  console.log("Inserting into DB:", { user_id, chatUser });
-
-  // ~~~~~~~~~~~~~~~~
+router.post("/messages", verifyToken, async (req, res) => {
+  const { chatUser, text } = req.body;
+  const userId = req.user?.user_id;
 
   if (!chatUser) {
-    return res.status(400).json({ error: "ChatUser is required" });
+    return res.status(400).json({ error: "chatUser is required" });
+  }
+
+  if (!userId) {
+    return res.status(401).json({ msg: "User ID missing from token" });
   }
 
   try {
-    const user_id = req.user.id;
-
-    console.log("Inserting into DB:", { user_id, chatUser });
-
-    const newChat = await db.query(
+    const result = await db.query(
       "INSERT INTO messages (user_id, user_message) VALUES ($1, $2) RETURNING *",
-      [loggedInUser.user_id, chatUser]
+      [userId, chatUser]
     );
-    res.status(201).json(newChat.rows[0]);
+    res.status(201).json(result.rows[0]);
   } catch (error) {
-    setError(
-      error.response?.data?.error || "Error creating chat. Please try again."
-    );
-    console.error("Error creating chat:", error.response?.data || error);
-
     console.error("Error creating chat:", error);
     res.status(500).json({ error: "Internal server error" });
   }

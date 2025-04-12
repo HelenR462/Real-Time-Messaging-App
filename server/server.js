@@ -20,7 +20,7 @@ app.use(express.json());
 app.use("/api", loginRoutes);
 app.use("/api", registerRoutes);
 app.use("/api", messagesRoutes);
-app.use("/api", require("./router/usersRouters"));
+app.use("/api", usersRoutes);
 
 const pool = new Pool({
   user: process.env.USER,

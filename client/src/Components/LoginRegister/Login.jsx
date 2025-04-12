@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./LoginRegister.css";
 
 function Login({ inputValue = {}, setInputValue }) {
@@ -9,6 +9,8 @@ function Login({ inputValue = {}, setInputValue }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log("Logging in with:", inputValue);
 
     try {
       const response = await axios.post("/api/login", inputValue);
@@ -95,12 +97,12 @@ function Login({ inputValue = {}, setInputValue }) {
           Log In
         </button>
 
-        {/* <p>
-          You have no account?{" "}
-          <Link className="register" to="/register"> 
+        <p className='link'>
+          Do you have no account?{" "}
+          <Link className='register-link' to='/register'>
             Register
           </Link>
-        </p> */}
+        </p>
       </form>
       {message && <p>{message}</p>}
     </div>

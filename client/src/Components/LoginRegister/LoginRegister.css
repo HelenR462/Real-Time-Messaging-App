@@ -2,14 +2,16 @@
 .login-register-table h1 {
   text-align: center;
   font-weight: 700;
-  padding: 20px;
+  padding:25px 0 5px 20px;
   font-size: 1.8rem;
   color: rgba(35, 161, 161, 0.952); 
 }
 
-label{
-  color:rgba(77, 76, 76, 0.952);
-}
+
+span{
+  margin-left: 50px;
+  color:white;
+ }
 
 .login-register-table input:focus,
 .login-register-table input:hover  {
@@ -23,19 +25,10 @@ label{
   color:rgba(35, 161, 161, 0.952); 
 }
 
-/* .login-register-table input[type="email"], [type="password"]{
-
-
-}
-
-
-} */
-
 
 /* Buttons */
-/* button.login, button.register {
+button.login, button.register {
   width: 100%; 
-  width: 280px; 
   padding: 5px 0; 
   font-size: 1.2rem; 
   border-radius: 5px;
@@ -46,89 +39,103 @@ label{
   font-weight: 550;
   margin: 20px 0;
 }
-*/
-button.login:hover, button.register:hover {
+
+
+ button.login:hover, button.register:hover {
   background-color: rgba(25, 141, 141, 0.952); 
 } 
 
 
 .login-register-table {
   box-sizing: border-box;
+  position: absolute;
   display:flex; 
-  width: 90%;
   flex-direction: column;
-  max-width: 500px;
-  margin: 10% auto;
+  max-width: 400px;
+  margin:  5%;
   padding:1% 10%;
+  border-color: 1px solid rgba(229,229, 229, 0.664) ;
   border-radius: 15px;
-  box-shadow: 3px 3px rgb(244, 241, 241);
+  box-shadow: 4px 3px 8px 4px rgba(224, 222, 222, 0.664);
   align-items: center;
   justify-content: center;
-  background-color: rgba(223, 241, 241, 0.952);
+  
 }
 
- .login-register-table input
-
- {
+ .login-register-table input {
   display:flex;
+  position: relative;
   align-items: center;
   justify-content: center;
   width: 100%;
-   max-width: 400px;
-   color:rgba(77, 76, 76, 0.952);
-  height:6vh;
-  padding: 10px 15px; /* Consistent padding */
-  margin: 0 30px ; 
+  max-width: 400px;
+  height:7vh;
+  padding: 10px 15px;
+  margin: 0 46px ; 
   font-size: 1rem;
-  background-color:white;
-  border-radius: 5px;
+  color:rgba(25, 141, 141, 0.952); 
+  border-radius: 30px;
   border: 0.5px solid rgba(234, 231, 231, 0.952);
- box-shadow: 1px 1px  rgba(210, 213, 213, 0.952);
   box-sizing: border-box; 
-  margin-bottom: 7px;
+  
  }
 
- 
+ ::placeholder{
+  color: rgba(35, 161, 161, 0.952); 
+ }
+
  input:focus input:hover  {
   outline:none;
-  border: 2px solid rgba(35, 161, 161, 0.952);
-  box-shadow: 2px 2px rgba(135, 187, 187, 0.952);
+  border: 1px solid rgba(35, 161, 161, 0.952);
+  box-shadow: 2px 4px rgba(135, 187, 187, 0.952);
  }
 
- span{
-  margin-left: 30px;
- }
- 
+  
  /* login/register button */
  button.login,button.register{
-   width:280px; 
-  height:7vh;
-  font-size:x-large;
- border-radius: 15px;
-  border: none;
-  box-shadow: 1px 2px rgba(215, 218, 218, 0.952);
- color:white;
+ width:300px; 
+ height:7vh;
+ font-size:x-large;
+ border-radius: 30px;
+ border: none;
+ box-shadow: 3px 2px rgba(229, 229, 229, 0.64);
  background-color: rgba(35, 161, 161, 0.952);
- margin: 15px 30px;
+ margin: 20px 0 20px 50px;
  font-weight: 700;
-padding: 2px;
+ padding: 2px;
 
 }
 
 /* login/register hover button */
 button.login, button.register:hover{
-background-color: rgba(35, 161, 161, 0.952);
-
+  color: rgba(251, 255, 255, 0.952); 
 
 } 
 
+.link{
+  color:rgba(24, 23, 23, 0.64);
+  font-size: medium;
+ margin-bottom:10%;
+ margin-left: 20%; 
+}
+
+.login-link, .register-link{
+  color: rgba(44, 158, 158, 0.952); 
+  font-weight: bold;
+}
+
+.login-link,.register-link:hover{
+  color: rgba(4, 139, 139, 0.952); 
+}
+
+
 /* logout button css in homepage */
 .logout{
-    width:120px;
-    height:6vh;
+   width:120px;
+   height:6vh;
    border-radius: 15px;
-    border: none;
-    box-shadow: 1px 2px rgba(183, 195, 195, 0.952);
+   border: none;
+   box-shadow: 1px 2px rgba(183, 195, 195, 0.952);
    color:white;
    margin-left: 5px;
    background-color: rgba(35, 161, 161, 0.952);

@@ -1,52 +1,41 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
+const JWT = require("jsonwebtoken");
 const db = require("../db");
-const JWT_SECRET = process.env.JWT_SECRET;
+const SECRET_KEY = process.env.JWT_SECRET;
+const { authenticateToken } = require("../JWT");
 
-router.get("/users", async (req, res) => {
+router.get("/users", authenticateToken, async (req, res) => {
+  const loggedInUserId = req.user.user_id;
+
+  // console.log("Authenticated user:", req.user);
+  // console.log("Logged-in user ID:", loggedInUserId);
+
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) {
-      return res.status(401).json({ error: "Unauthorized: No token provided" });
-    }
+    const result = await db.query(
+      "SELECT user_id, username, image_url FROM public.users WHERE user_id IS NOT NULL AND user_id != $1",
+      [loggedInUserId]
+    );
 
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      const loggedInUserId = decoded.user_id;
+    const defaultImage = "default.png";
 
-      console.log("Logged-in user ID:", loggedInUserId);
+    const usersWithImages = result.rows.map((user) => {
+      const fileName = user.image_url?.trim();
+      const isValid =
+        fileName && !fileName.includes("/") && fileName.includes(".png");
 
-      const result = await db.query(
-        "SELECT user_id, username, image_url FROM public.users WHERE user_id IS NOT NULL AND user_id != $1",
-        [loggedInUserId]
-      );
+      return {
+        ...user,
+        image_url: isValid
+          ? `/public/assets/images/${fileName}`
+          : `/public/assets/images/${defaultImage}`,
+      };
+    });
 
-      const defaultImage = "default.png";
-
-      console.log("Raw DB users:", result.rows);
-
-      const usersWithImages = result.rows.map((user) => {
-        const fileName = user.image_url?.trim();
-        const isValid =
-          fileName && !fileName.includes("/") && fileName.includes(".png");
-
-        return {
-          ...user,
-          image_url: isValid
-            ? `/public/assets/images/${fileName}`
-            : `/public/assets/images/${defaultImage}`,
-        };
-      });
-
-      res.json(usersWithImages);
-    } catch (err) {
-      console.error("JWT verification failed:", err.message);
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
-    }
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.json(usersWithImages);
+  } catch (err) {
+    console.error("JWT verification failed:", err.message);
+    return res.status(401).json({ error: "Unauthorized: Invalid token" });
   }
 });
 

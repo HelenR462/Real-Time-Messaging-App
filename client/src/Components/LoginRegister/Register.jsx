@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./LoginRegister.css";
 
 function Register({ inputValue, setInputValue }) {
@@ -29,7 +29,7 @@ function Register({ inputValue, setInputValue }) {
     const { name, value } = e.target;
     setInputValue((prevState) => ({
       ...prevState,
-      [name]:  value,
+      [name]: value,
       [name]:
         name === "username" || name === "email" ? value.toLowerCase() : value,
     }));
@@ -81,12 +81,12 @@ function Register({ inputValue, setInputValue }) {
           Register
         </button>
 
-        {/* <p>
-          Already have an account? 
-          <Link className='login' to='/'> 
+        <p className='link'>
+          Already have an account?{" "}
+          <Link className='login-link' to='/'>
             Log in
           </Link>
-        </p> */}
+        </p>
       </form>
       {message && <p>{message}</p>}
     </div>

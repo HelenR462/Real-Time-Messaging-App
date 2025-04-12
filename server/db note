@@ -9,17 +9,27 @@ CREATE TABLE users (
 
 INSERT INTO users (user_id, user_name, email, passwordhash,image_url, timestamp) VALUES ($1, $2, $3, $4);
 
-
-
-  CREATE TABLE messages (
-  message_id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL,
-  user_message TEXT NOT NULL,
-  created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+CREATE TABLE messages (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  text TEXT NOT NULL,
+  chat_user TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO messages ( message_id, user_id, user_message, created_date) VALUES ($1);
+
+
+
+--   CREATE TABLE messages (
+--   message_id SERIAL PRIMARY KEY,
+--   user_id INTEGER NOT NULL,
+--   user_message TEXT NOT NULL,
+--   created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+-- );
+
+
 
 
 
