@@ -8,9 +8,6 @@ const { authenticateToken } = require("../JWT");
 router.get("/users", authenticateToken, async (req, res) => {
   const loggedInUserId = req.user.user_id;
 
-  // console.log("Authenticated user:", req.user);
-  // console.log("Logged-in user ID:", loggedInUserId);
-
   try {
     const result = await db.query(
       "SELECT user_id, username, image_url FROM public.users WHERE user_id IS NOT NULL AND user_id != $1",
@@ -26,9 +23,8 @@ router.get("/users", authenticateToken, async (req, res) => {
 
       return {
         ...user,
-        image_url: isValid
-          ? `/public/assets/images/${fileName}`
-          : `/public/assets/images/${defaultImage}`,
+        image_url : fileName
+               
       };
     });
 

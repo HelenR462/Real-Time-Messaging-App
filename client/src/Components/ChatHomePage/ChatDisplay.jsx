@@ -3,7 +3,6 @@ import axios from "axios";
 import "../ChatHomePage/ChatDisplay.css";
 import ChatUsers from "./ChatUsers";
 
-
 function ChatDisplay({ inputValue = {}, selectedUser, messages, setMessages }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

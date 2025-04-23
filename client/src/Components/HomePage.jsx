@@ -7,6 +7,7 @@ import Chats from "./ChatHomePage/Chats";
 function HomePage({ inputValue = {}, handleSendMessage }) {
   const [user, setUser] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -23,6 +24,8 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const token = localStorage.getItem("token");
+    console.log("storedUser:", storedUser);
+    console.log("token:", token);
 
     if (!storedUser || !token) {
       setUser(null);
@@ -37,18 +40,21 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
     } catch (err) {
       console.error("Error parsing storedUser from localStorage:", err);
     }
-    
+
     if (!parsedUser) {
       setUser(null);
       return;
     }
-    
+
     const fetchUserData = async () => {
+      console.log("Calling fetchUserData...");
       try {
         const response = await axios.get(`/api/user/${parsedUser.user_id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUser(response.data);
+
+        console.log("Fetched user:", response.data);
+        setUser(response.data.user);
 
         const messagesRes = await axios.get(
           `/api/messages/${parsedUser.user_id}`,
@@ -56,7 +62,9 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+
         setMessages(messagesRes.data);
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching logged-in user:", err);
       }
@@ -65,27 +73,29 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
     fetchUserData();
   }, []);
 
+  console.log("User state:", user);
+
   return (
     <div className='home-page'>
-      <div>
-        {user ? (
-          <>
-            <h1>Welcome, {user.username}</h1>
-            {user.image_url && (
-              <img
-                src={user.image_url}
-                alt={user.username}
-                className='profile-pic'
-              />
-            )}
-          </>
-        ) : (
-          <p>Loading...</p>
-        )}
-        <button className='logout' onClick={handleLogout}>
-          Log Out
-        </button>
-      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <h1>Welcome, {user?.username}</h1>
+
+          {user?.image_url && (
+            <img
+              src={user.image_url}
+              alt={user.username}
+              className='profile-pic'
+            />
+          )}
+        </div>
+      )}
+
+      <button className='logout' onClick={handleLogout}>
+        Log Out
+      </button>
 
       <div>
         <ChatDisplay

@@ -14,8 +14,12 @@ function Login({ inputValue = {}, setInputValue }) {
 
     try {
       const response = await axios.post("/api/login", inputValue);
-      setMessage("Login successful!");
+
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // setMessage("Login successful!");
       const token = response.data.token;
+      console.log("Login response:", response.data);
 
       if (token) {
         localStorage.setItem("token", token);

@@ -28,8 +28,9 @@ router.get("/messages", async (req, res) => {
 });
 
 router.post("/messages", verifyToken, async (req, res) => {
-  const { chatUser, text } = req.body;
+  const { chatUser, user_message } = req.body;
   const userId = req.user?.user_id;
+  const created_date = new Date();
 
   if (!chatUser) {
     return res.status(400).json({ error: "chatUser is required" });
@@ -41,12 +42,32 @@ router.post("/messages", verifyToken, async (req, res) => {
 
   try {
     const result = await db.query(
-      "INSERT INTO messages (user_id, user_message) VALUES ($1, $2) RETURNING *",
-      [userId, chatUser]
+      // "INSERT INTO messages (user_id, user_message) VALUES ($1, $2) RETURNING *",
+      // [userId, chatUser]
+
+      `INSERT INTO messages (user_id, receiver_id, user_message, created_date)
+      VALUES ($1, $2, $3, $4)`,
+     [user_id, receiver_id, user_message, created_date]
+
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error("Error creating chat:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/messages/:user_id", verifyToken, async (req, res) => {
+  const { user_id } = req.params;
+
+  try {
+    const result = await db.query(
+      `SELECT * FROM messages WHERE user_id = $1 ORDER BY created_at ASC`,
+      [user_id]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching messages by user_id:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

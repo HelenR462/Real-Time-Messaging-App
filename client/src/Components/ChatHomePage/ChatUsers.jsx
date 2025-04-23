@@ -46,8 +46,7 @@ const ChatUsers = () => {
           return (
             <div key={user.user_id} className='user'>
               <img
-                src={`http://localhost:5000/public/assets/images${
-                  user.image_url }`}
+                src={`http://localhost:5000${user.image_url}`}
                 alt={user.username}
                 onError={(e) =>
                   (e.target.src =
