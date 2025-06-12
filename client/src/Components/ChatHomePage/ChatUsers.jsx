@@ -11,7 +11,7 @@ const ChatUsers = () => {
         const token = localStorage.getItem("token");
 
         if (!token) throw new Error("No token found, user is unauthorized");
-
+        
         const response = await axios.get("/api/users", {
           headers: {
             Authorization: `Bearer ${token}`,

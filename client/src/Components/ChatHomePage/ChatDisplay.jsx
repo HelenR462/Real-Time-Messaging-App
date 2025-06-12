@@ -3,32 +3,55 @@ import axios from "axios";
 import "../ChatHomePage/ChatDisplay.css";
 import ChatUsers from "./ChatUsers";
 
-function ChatDisplay({ inputValue = {}, selectedUser, messages, setMessages }) {
+function ChatDisplay({ inputValue = {}, selectedUser, messages, setMessages, loggedInUser }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      setLoading(true);
+useEffect(() => {
+  const fetchMessages = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
 
-      //get all messages
-      try {
-        const response = await axios.get("/api/messages");
-        if (response.data && Array.isArray(response.data)) {
-          setMessages(response.data);
-        } else {
-          throw new Error("Invalid data format from API");
-        }
-      } catch (err) {
-        console.error("Error fetching messages:", err);
-        setError("Failed to load messages.");
-      } finally {
+    try {
+      const storedUser = localStorage.getItem("user");
+      const loggedInUser = storedUser ? JSON.parse(storedUser) : null;
+      const loggedInUserId = loggedInUser?.user_id;
+
+      if (!loggedInUserId) {
+        setError("User not found.");
         setLoading(false);
+        return;
       }
-    };
 
-    fetchMessages();
-  }, [inputValue?.username, setMessages]);
+      const response = await axios.get(`/api/messages/${loggedInUserId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (response.data && Array.isArray(response.data)) {
+        const filteredMessages = response.data.filter(
+          (msg) =>
+            (msg.user_id === loggedInUserId &&
+              msg.receiver_id === selectedUser?.user_id) ||
+            (msg.user_id === selectedUser?.user_id &&
+              msg.receiver_id === loggedInUserId)
+        );
+
+        setMessages(filteredMessages);
+      } else {
+        throw new Error("Invalid data format from API");
+      }
+    } catch (err) {
+      console.error("Error fetching messages:", err);
+      setError("Failed to load messages.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchMessages();
+}, [inputValue?.username, selectedUser?.user_id, setMessages]);
+
+
 
   return (
     <div className='chat-display'>
@@ -52,8 +75,8 @@ function ChatDisplay({ inputValue = {}, selectedUser, messages, setMessages }) {
               <li key={message.id || `msg-${index}`} className='chat-card'>
                 {selectedUser && (
                   <img
-                    src={selectedUser?.image_url || "default.png"}
-                    alt={selectedUser?.username || inputValue?.username}
+                    src={selectedUser?.image_url || loggedInUser?.image_url || "default.png"}
+                    alt={selectedUser?.username || loggedInUser?.username || inputValue?.username}
                   />
                 )}
                 <div className='chat-card-content'>

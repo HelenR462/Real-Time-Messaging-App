@@ -3,10 +3,10 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const db = require("../db");
 
-async function registerUser(username, email, passwordhush) {
+async function registerUser(username, email,password_hash) {
   const result = await db.query(
-    "INSERT INTO public.users (username, email, passwordhush, image_url) VALUES ($1, $2, $3, $4) RETURNING *",
-    [username, email, passwordhush]
+    "INSERT INTO public.users (username, email,password_hash, image_url) VALUES ($1, $2, $3, $4) RETURNING *",
+    [username, email,password_hash]
   );
   return result.rows[0];
 }

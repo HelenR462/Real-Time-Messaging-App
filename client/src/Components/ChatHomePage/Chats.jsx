@@ -2,18 +2,20 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Chats.css";
 
-function Chats({ inputValue = {}, setChats, messages, setMessages }) {
+function Chats({ setChats,  }) {
   const [chatUser, setChatUser] = useState("");
-  // const [newMessage, setNewMessage] = useState();
+  const [chatMessage, setChatMessage] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  console.log("Creating chat with:", chatUser);
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
 
-    if (!chatUser) {
-      setError("Username is required to start a chat.");
-      return;
+    if (!chatUser|| !chatMessage) {
+  setError("Both username and message are required.");
+  return;
     }
 
     const token = localStorage.getItem("token");
@@ -24,9 +26,19 @@ function Chats({ inputValue = {}, setChats, messages, setMessages }) {
     }
 
     try {
+      const receiverRes = await axios.get(`/api/users/username/${chatUser}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("Creating chat with:", chatUser);
+
+      const receiver_id = receiverRes.data.user_id;
+
+      const user_message = chatMessage;
+
       const response = await axios.post(
         "/api/messages",
-        { chatUser },
+        { receiver_id, user_message },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -36,6 +48,7 @@ function Chats({ inputValue = {}, setChats, messages, setMessages }) {
         setChats((prevChats) => [...prevChats, response.data]);
         setSuccess("Chat created successfully!");
         setChatUser("");
+        setChatMessage("");
         setError(null);
       }
     } catch (error) {
@@ -54,33 +67,27 @@ function Chats({ inputValue = {}, setChats, messages, setMessages }) {
   } catch (err) {
     console.error("Failed to parse user from localStorage:", err);
   }
-  
 
   const loggedInUsername = storedUser?.username || "";
 
   const handleUserChange = (e) => {
     e.preventDefault();
     setChatUser(e.target.value);
+    setChatMessage(e.target.value);
     setError(null);
   };
 
-  // const handleSendMessage = () => {
-  //   const newMessages = [...messages, { user: "You", text: newMessage }];
-  //   const limitedMessages = newMessages.slice(-10);
-  //   setMessages(limitedMessages);
-  //   setNewMessage("");
-  // };
-
   return (
     <form onSubmit={handleCreateChat} className='new-chat-form'>
+
       <label>
         {loggedInUsername}:
         <input
           type='text'
           className='chat-input'
-          value={chatUser}
+          value={chatMessage}
           onChange={handleUserChange}
-          placeholder='What is happening?'
+          placeholder='Type your message...'
         />
       </label>
       <button className='send' type='submit'>

@@ -17,7 +17,25 @@ const verifyToken = (req, res, next) => {
   });
 };
 
+router.get("/users/username/:username", async (req, res) => {
+  const { username } = req.params;
+  try {
+    const result = await db.query(
+      "SELECT * FROM public.users WHERE LOWER(username) = LOWER($1)",
+      [username]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error fetching user by username:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.get("/messages", async (req, res) => {
+ 
   try {
     const result = await db.query(`SELECT * FROM public.messages`);
     res.json(result.rows);
@@ -28,12 +46,14 @@ router.get("/messages", async (req, res) => {
 });
 
 router.post("/messages", verifyToken, async (req, res) => {
-  const { chatUser, user_message } = req.body;
+  const { receiver_id, user_message } = req.body;
   const userId = req.user?.user_id;
-  const created_date = new Date();
+  const created_at = new Date();
 
-  if (!chatUser) {
-    return res.status(400).json({ error: "chatUser is required" });
+  if (!receiver_id || chatUser || !user_message) {
+    return res
+      .status(400)
+      .json({ error: "receiver_id and user_message are required" });
   }
 
   if (!userId) {
@@ -42,13 +62,9 @@ router.post("/messages", verifyToken, async (req, res) => {
 
   try {
     const result = await db.query(
-      // "INSERT INTO messages (user_id, user_message) VALUES ($1, $2) RETURNING *",
-      // [userId, chatUser]
-
-      `INSERT INTO messages (user_id, receiver_id, user_message, created_date)
-      VALUES ($1, $2, $3, $4)`,
-     [user_id, receiver_id, user_message, created_date]
-
+      `INSERT INTO messages (user_id, receiver_id, user_message, created_at)
+      VALUES ($1, $2, $3, $4) RETURNING *`,
+      [userId, receiver_id, user_message, created_at]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -62,7 +78,7 @@ router.get("/messages/:user_id", verifyToken, async (req, res) => {
 
   try {
     const result = await db.query(
-      `SELECT * FROM messages WHERE user_id = $1 ORDER BY created_at ASC`,
+      `SELECT * FROM messages WHERE (user_id = $1 OR receiver_id = $1)ORDER BY created_at ASC`,
       [user_id]
     );
     res.json(result.rows);

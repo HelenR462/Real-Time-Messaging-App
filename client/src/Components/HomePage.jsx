@@ -11,6 +11,8 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
 
   const navigate = useNavigate();
 
+  console.log("User state:", user);
+
   const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -47,14 +49,13 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
     }
 
     const fetchUserData = async () => {
-      console.log("Calling fetchUserData...");
       try {
         const response = await axios.get(`/api/user/${parsedUser.user_id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         console.log("Fetched user:", response.data);
-        setUser(response.data.user);
+        setUser(response.data);
 
         const messagesRes = await axios.get(
           `/api/messages/${parsedUser.user_id}`,
@@ -73,15 +74,13 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
     fetchUserData();
   }, []);
 
-  console.log("User state:", user);
-
   return (
     <div className='home-page'>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <div>
-          <h1>Welcome, {user?.username}</h1>
+          <h1>Welcome, {user.user.username}</h1>
 
           {user?.image_url && (
             <img
@@ -102,12 +101,14 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
           inputValue={inputValue}
           messages={messages}
           setMessages={setMessages}
+         
         />
         <Chats
           inputValue={inputValue}
           setChats={setMessages}
           messages={messages}
           handleSendMessage={handleSendMessage}
+         
         />
       </div>
     </div>

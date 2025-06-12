@@ -3,16 +3,17 @@ const app = express();
 const cors = require("cors");
 const path = require("path");
 const { Pool } = require("pg");
+
+require("dotenv").config();
+
 const loginRoutes = require("./router/loginRouters");
 const registerRoutes = require("./router/registerRouters");
 const messagesRoutes = require("./router/messagesRouters");
 const usersRoutes = require("./router/usersRouters");
 
-require("dotenv").config();
-
 const port = 5000;
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 app.use("/public", express.static(path.join(__dirname, "public")));
 
@@ -30,9 +31,16 @@ const pool = new Pool({
   port: process.env.PORT,
 });
 
-pool.connect().then(() => {
-  console.log("Connected to PostgreSQL database");
-});
+
+pool
+  .connect()
+  .then(() => {
+    console.log("Connected to PostgreSQL database");
+  })
+  .catch((err) => {
+    console.error("Failed to connect to PostgreSQL:", err.message);
+    process.exit(1);
+  });
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

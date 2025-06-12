@@ -3,9 +3,9 @@ const router = express.Router();
 const JWT = require("jsonwebtoken");
 const db = require("../db");
 const SECRET_KEY = process.env.JWT_SECRET;
-const { authenticateToken } = require("../JWT");
+const { verifyToken } = require("../middleware/verifyToken");
 
-router.get("/users", authenticateToken, async (req, res) => {
+router.get("/users", verifyToken, async (req, res) => {
   const loggedInUserId = req.user.user_id;
 
   try {
@@ -23,8 +23,7 @@ router.get("/users", authenticateToken, async (req, res) => {
 
       return {
         ...user,
-        image_url : fileName
-               
+        image_url: fileName,
       };
     });
 
@@ -35,8 +34,8 @@ router.get("/users", authenticateToken, async (req, res) => {
   }
 });
 
-router.get("/user/:id", async (req, res) => {
-  const userId = parseInt(req.params.id, 10);
+router.get("/user/:user_id", async (req, res) => {
+  const userId = parseInt(req.params.user_id, 10);
 
   if (isNaN(userId)) {
     return res.status(400).json({ error: "Invalid user ID" });
@@ -52,7 +51,14 @@ router.get("/user/:id", async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json(result.rows[0]);
+    const user = result.rows[0];
+    res.json({
+      user: {
+        user_id: user.user_id,
+        username: user.username,
+        image_url: user.image_url,
+      },
+    });
   } catch (error) {
     console.error("Error fetching user:", error);
     res.status(500).json({ error: "Internal server error" });

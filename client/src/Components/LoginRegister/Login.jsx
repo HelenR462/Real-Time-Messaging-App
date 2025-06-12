@@ -17,7 +17,6 @@ function Login({ inputValue = {}, setInputValue }) {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      // setMessage("Login successful!");
       const token = response.data.token;
       console.log("Login response:", response.data);
 

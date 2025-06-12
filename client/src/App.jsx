@@ -9,7 +9,6 @@ import ChatUsers from "./Components/ChatHomePage/ChatUsers";
 
 function App() {
   const [inputValue, setInputValue] = useState({
-    id: "",
     username: "",
     email: "",
     password: "",
@@ -36,7 +35,10 @@ function App() {
             element={<HomePage inputValue={inputValue} />}
           />
           <Route path='/chat_display' element={<ChatDisplay />} />
-          <Route path='/chats/:chatId' element={<Chats inputValue={inputValue} />} />
+          <Route
+            path='/chats/:chatId'
+            element={<Chats inputValue={inputValue} />}
+          />
           <Route path='/Chat_users' element={<ChatUsers />} />
         </Routes>
       </BrowserRouter>
