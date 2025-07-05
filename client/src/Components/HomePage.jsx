@@ -6,6 +6,8 @@ import Chats from "./ChatHomePage/Chats";
 
 function HomePage({ inputValue = {}, handleSendMessage }) {
   const [user, setUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,6 +18,7 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
   const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    setSelectedUser();
     setMessages([]);
     setUser(null);
     setTimeout(() => {
@@ -101,14 +104,13 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
           inputValue={inputValue}
           messages={messages}
           setMessages={setMessages}
-         
         />
         <Chats
           inputValue={inputValue}
           setChats={setMessages}
           messages={messages}
+          selectedUser={selectedUser}
           handleSendMessage={handleSendMessage}
-         
         />
       </div>
     </div>

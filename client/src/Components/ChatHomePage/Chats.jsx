@@ -2,97 +2,81 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Chats.css";
 
-function Chats({ setChats,  }) {
-  const [chatUser, setChatUser] = useState("");
+function Chats({ setChats, selectedUser }) {
   const [chatMessage, setChatMessage] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  console.log("Creating chat with:", chatUser);
+  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const loggedInUsername = storedUser.username || "";
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
+    console.log("Submit fired with", { selectedUser, chatMessage });
 
-    if (!chatUser|| !chatMessage) {
-  setError("Both username and message are required.");
-  return;
+    if (!selectedUser) {
+      setError("No user selected to send a message.");
+      return;
+    }
+
+    if (!chatMessage.trim()) {
+      setError("Message is required.");
+      return;
     }
 
     const token = localStorage.getItem("token");
-
     if (!token) {
       setError("Authentication token not found.");
       return;
     }
 
     try {
-      const receiverRes = await axios.get(`/api/users/username/${chatUser}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      console.log("Creating chat with:", chatUser);
-
-      const receiver_id = receiverRes.data.user_id;
-
-      const user_message = chatMessage;
-
       const response = await axios.post(
         "/api/messages",
-        { receiver_id, user_message },
+        {
+          receiver_id: selectedUser.user_id,
+          user_message: chatMessage,
+        },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
+      console.log("Message sent response:", response.data);
+
       if (response.data) {
-        setChats((prevChats) => [...prevChats, response.data]);
-        setSuccess("Chat created successfully!");
-        setChatUser("");
+        setChats((prev) => [
+          ...prev,
+          { ...response.data, sender_username: loggedInUsername },
+        ]);
+        setSuccess("Message sent!");
         setChatMessage("");
         setError(null);
       }
-    } catch (error) {
-      setError("Error creating chat. Please try again.");
-      console.error("Error creating chat:", error.response || error);
+    } catch (err) {
+      console.error("Error creating chat:", err.response?.data || err.message);
+      setError(
+        err.response?.data?.error || "Error creating chat. Please try again."
+      );
     }
-  };
-
-  const newUser = localStorage.getItem("user");
-
-  let storedUser = null;
-  try {
-    if (newUser && newUser !== "undefined") {
-      storedUser = JSON.parse(newUser);
-    }
-  } catch (err) {
-    console.error("Failed to parse user from localStorage:", err);
-  }
-
-  const loggedInUsername = storedUser?.username || "";
-
-  const handleUserChange = (e) => {
-    e.preventDefault();
-    setChatUser(e.target.value);
-    setChatMessage(e.target.value);
-    setError(null);
   };
 
   return (
     <form onSubmit={handleCreateChat} className='new-chat-form'>
-
       <label>
-        {loggedInUsername}:
+        {loggedInUsername}
         <input
           type='text'
           className='chat-input'
           value={chatMessage}
-          onChange={handleUserChange}
+          onChange={(e) => setChatMessage(e.target.value)}
           placeholder='Type your message...'
         />
       </label>
       <button className='send' type='submit'>
         Send
       </button>
+
       {error && <p className='error-message'>{error}</p>}
       {success && <p className='success-message'>{success}</p>}
     </form>

@@ -35,7 +35,6 @@ router.get("/users/username/:username", async (req, res) => {
 });
 
 router.get("/messages", async (req, res) => {
- 
   try {
     const result = await db.query(`SELECT * FROM public.messages`);
     res.json(result.rows);
@@ -50,7 +49,7 @@ router.post("/messages", verifyToken, async (req, res) => {
   const userId = req.user?.user_id;
   const created_at = new Date();
 
-  if (!receiver_id || chatUser || !user_message) {
+  if (!receiver_id || !user_message) {
     return res
       .status(400)
       .json({ error: "receiver_id and user_message are required" });
