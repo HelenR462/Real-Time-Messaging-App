@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+// import {Link} from "react-router-dom";
 import axios from "axios";
 
 const ChatUsers = () => {
@@ -45,6 +46,9 @@ const ChatUsers = () => {
         remainingUsers.map((user) => {
           return (
             <div key={user.user_id} className='user'>
+               {/* <Link to={`/chat/${user.user_id}`}>
+            {user.username}
+          </Link> */}
               <img
                 src={`http://localhost:5000${user.image_url}`}
                 alt={user.username}

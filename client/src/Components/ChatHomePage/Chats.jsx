@@ -14,11 +14,6 @@ function Chats({ setChats, selectedUser }) {
     e.preventDefault();
     console.log("Submit fired with", { selectedUser, chatMessage });
 
-    if (!selectedUser) {
-      setError("No user selected to send a message.");
-      return;
-    }
-
     if (!chatMessage.trim()) {
       setError("Message is required.");
       return;
@@ -34,7 +29,7 @@ function Chats({ setChats, selectedUser }) {
       const response = await axios.post(
         "/api/messages",
         {
-          receiver_id: selectedUser.user_id,
+      
           user_message: chatMessage,
         },
         {
