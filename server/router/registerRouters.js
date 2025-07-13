@@ -3,10 +3,10 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const db = require("../db");
 
-async function registerUser(username, email,password_hash) {
+async function registerUser(username, email, password_hash) {
   const result = await db.query(
     "INSERT INTO public.users (username, email,password_hash, image_url) VALUES ($1, $2, $3, $4) RETURNING *",
-    [username, email,password_hash]
+    [username, email, password_hash]
   );
   return result.rows[0];
 }
@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const image_url = `${username}.png`; 
+    const image_url = `${username}.png`;
 
     const newUser = await registerUser(username, email, hashedPassword);
 

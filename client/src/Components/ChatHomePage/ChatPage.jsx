@@ -1,50 +1,46 @@
-// import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-// import axios from "axios";
-// import Chats from "./Chats";
-// import ChatDisplay from "./ChatDisplay";
-// import HomePage from "../HomePage";
-// import ChatUsers from "./ChatUsers";
+import React, { useState } from "react";
+import axios from "axios";
+import ChatUsers from "./ChatUsers";
+import ChatDisplay from "./ChatDisplay";
+import Chats from "./Chats";
 
+function ChatPage() {
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [messages, setMessages] = useState([]);
 
-// function ChatPage() {
-//   const { userId } = useParams();
-//   const [messages, setMessages] = useState([]);
-//   const [selectedUser, setSelectedUser] = useState(null);
+  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const loggedInUsername = storedUser.username || "";
 
-//   useEffect(() => {
-//     const fetchChatData = async () => {
-//       try {
-//         const userRes = await axios.get(`/api/users/${userId}`);
-//         setSelectedUser(userRes.data);
+  const handleSelectUser = async (user) => {
+    setSelectedUser(user);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`/api/messages/${user.user_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMessages(res.data);
+    } catch (err) {
+      console.error("Error loading messages:", err);
+    }
+  };
 
-//         const token = localStorage.getItem("token");
-//         const messagesRes = await axios.get(`/api/messages/${userId}`, {
-//           headers: { Authorization: `Bearer ${token}` },
-//         });
-//         setMessages(messagesRes.data);
-//       } catch (err) {
-//         console.error("Error loading chat:", err);
-//       }
-//     };
+  return (
+    <div className='chat-container'>
+      <ChatUsers onSelectUser={handleSelectUser} />
+      <div className='chat-main'>
+        <h2>
+          {loggedInUsername} chatting with{" "}
+          {selectedUser?.username || "No user selected"}
+        </h2>
+        <ChatDisplay
+          messages={messages}
+          selectedUser={selectedUser}
+          loggedInUser={storedUser}
+        />
+        <Chats selectedUser={selectedUser} setChats={setMessages} />
+      </div>
+    </div>
+  );
+}
 
-//     fetchChatData();
-//   }, [userId]);
-
-//   return (
-//     <div>
-//       <h2>Chat with {selectedUser?.username || userId}</h2>
-//       <ul>
-//         {messages.map((msg) => (
-//           <li key={msg.message_id}>{msg.user_message}</li>
-//         ))}
-//       </ul>
-//       <HomePage/>
-//       <ChatDisplay/>
-//       <Chats /> 
-//       <ChatUsers/>
-//     </div>
-//   );
-// }
-
-// export default ChatPage;
+export default ChatPage;

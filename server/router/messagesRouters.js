@@ -45,14 +45,12 @@ router.get("/messages", async (req, res) => {
 });
 
 router.post("/messages", verifyToken, async (req, res) => {
-  const {  user_message } = req.body;
+  const { user_message } = req.body;
   const userId = req.user?.user_id;
   const created_at = new Date();
 
   if (!user_message) {
-    return res
-      .status(400)
-      .json({ error: "user_message is required" });
+    return res.status(400).json({ error: "user_message is required" });
   }
 
   if (!userId) {

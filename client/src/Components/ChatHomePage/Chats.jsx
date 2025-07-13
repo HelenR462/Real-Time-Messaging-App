@@ -29,7 +29,6 @@ function Chats({ setChats, selectedUser }) {
       const response = await axios.post(
         "/api/messages",
         {
-      
           user_message: chatMessage,
         },
         {

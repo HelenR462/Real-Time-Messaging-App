@@ -26,10 +26,6 @@ router.post("/login", async (req, res) => {
     const user = await findUser(email);
     console.log("User found in database:", user);
 
-    // if (!user) {
-    //   return res.status(404).json({ message: "User not found" });
-    // }
-
     const passwordIsMatch = await bcrypt.compare(password, user.password_hash);
     if (!passwordIsMatch) {
       return res.status(400).json({ message: "Invalid password!" });

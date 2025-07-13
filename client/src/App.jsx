@@ -4,7 +4,7 @@ import Login from "./Components/LoginRegister/Login";
 import Register from "./Components/LoginRegister/Register";
 import HomePage from "./Components/HomePage";
 import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
-// import ChatPage from "./Components/ChatHomePage/ChatPage";
+import ChatPage from "./Components/ChatHomePage/ChatPage";
 import Chats from "./Components/ChatHomePage/Chats";
 import ChatUsers from "./Components/ChatHomePage/ChatUsers";
 
@@ -40,7 +40,7 @@ function App() {
             path='/chats/:chatId'
             element={<Chats inputValue={inputValue} />}
           />
-          {/* <Route path='/chat/:userId' element={<ChatPage />} /> */}
+          <Route path='/chat/:userId' element={<ChatPage />} />
           <Route path='/Chat_users' element={<ChatUsers />} />
         </Routes>
       </BrowserRouter>

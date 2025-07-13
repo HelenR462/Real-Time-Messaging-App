@@ -34,7 +34,7 @@ router.get("/users", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/user/:user_id", async (req, res) => {
+router.get("/users/:user_id", async (req, res) => {
   const userId = parseInt(req.params.user_id, 10);
 
   if (isNaN(userId)) {

@@ -53,7 +53,7 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
 
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`/api/user/${parsedUser.user_id}`, {
+        const response = await axios.get(`/api/users/${parsedUser.user_id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

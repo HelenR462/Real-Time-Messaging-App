@@ -5,8 +5,7 @@ import ChatUsers from "./ChatUsers";
 function ChatDisplay({
   inputValue = {},
   selectedUser,
-  messages,
-  // setMessages,
+  messages = [],
   loggedInUser,
 }) {
   const error = null;
@@ -22,7 +21,7 @@ function ChatDisplay({
         <h2>Your Chats</h2>
         {error ? (
           <p className='error'>{error}</p>
-        ) : messages.length === 0 ? (
+        ) : !messages || messages.length === 0 ? (
           <p>No messages available.</p>
         ) : (
           <ul className='messages-list'>
