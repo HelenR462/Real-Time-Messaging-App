@@ -11,49 +11,12 @@ INSERT INTO users (user_id, user_name, email, passwordhash,image_url, timestamp)
 
 CREATE TABLE messages (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id),
-  text TEXT NOT NULL,
-  chat_user TEXT,
+  sender_id INTEGER REFERENCES users(user_id),
+  receiver_id INTEGER REFERENCES users(user_id),
+  user_message TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO messages ( message_id, user_id, user_message, created_date) VALUES ($1);
+INSERT INTO messages ( sender_id, receiver_id, user_message, created_date) VALUES ($1);
 
 
-
---   CREATE TABLE messages (
---   message_id SERIAL PRIMARY KEY,
---   user_id INTEGER NOT NULL,
---   user_message TEXT NOT NULL,
---   created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
--- );
-
-
-
-
-
-{
-  /* <div className='card'>
-        <div className='card-body'>
-          <ul className='side-bar'>
-            <li>
-              <img src='/../images/sportivo.jpg' alt='sportivo' />
-              <h6>BibiTuti</h6>
-            </li>
-            <li>
-              <img src='/images/swanfairy.jpg' alt='swanfairy' />
-              <h6>SwanFairy</h6>
-            </li>
-            <li>
-              <img src='/images/spongebob.jpg' alt='spongebob' />
-              <h6>SpongeBob</h6>
-            </li>
-          </ul>
-        </div>
-      </div> */
-}
--- //     </div>
-
--- //   );
--- // }

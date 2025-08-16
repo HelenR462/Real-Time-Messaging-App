@@ -2,63 +2,64 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Chats.css";
 
-function Chats({ setChats, selectedUser }) {
+function Chats({ setChats, selectedUser, loggedInUser }) {
   const [chatMessage, setChatMessage] = useState("");
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
 
   const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-  const loggedInUsername = storedUser.username || "";
+  const loggedInUsername= storedUser.username || "";
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
-    console.log("Submit fired with", { selectedUser, chatMessage });
 
     if (!chatMessage.trim()) {
       setError("Message is required.");
       return;
     }
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError("Authentication token not found.");
+    if (!loggedInUser || !selectedUser) {
+      setError("Logged-in user or selected user is missing.");
       return;
     }
 
-    try {
-      const response = await axios.post(
-        "/api/messages",
-        {
-          user_message: chatMessage,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("Authentication token missing.");
+      return;
+    }
 
-      console.log("Message sent response:", response.data);
+    const chatObj = {
+      sender_id: loggedInUser.user_id,
+      receiver_id: selectedUser.user_id,
+      user_message: chatMessage,
+    };
+
+    try {
+      const response = await axios.post("/api/messages", chatObj, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.data) {
         setChats((prev) => [
           ...prev,
-          { ...response.data, sender_username: loggedInUsername },
+          {
+            ...response.data,
+            sender_username: loggedInUsername.username,
+          },
         ]);
-        setSuccess("Message sent!");
         setChatMessage("");
         setError(null);
       }
     } catch (err) {
-      console.error("Error creating chat:", err.response?.data || err.message);
-      setError(
-        err.response?.data?.error || "Error creating chat. Please try again."
-      );
+      console.error("Error creating chat:", err);
+      setError(err.response?.data?.error || "Error sending message.");
     }
   };
 
   return (
     <form onSubmit={handleCreateChat} className='new-chat-form'>
       <label>
-        {loggedInUsername}
+        {loggedInUsername.username}
         <input
           type='text'
           className='chat-input'
@@ -72,7 +73,6 @@ function Chats({ setChats, selectedUser }) {
       </button>
 
       {error && <p className='error-message'>{error}</p>}
-      {success && <p className='success-message'>{success}</p>}
     </form>
   );
 }

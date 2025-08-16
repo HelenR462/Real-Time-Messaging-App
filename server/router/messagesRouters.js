@@ -45,27 +45,26 @@ router.get("/messages", async (req, res) => {
 });
 
 router.post("/messages", verifyToken, async (req, res) => {
-  const { user_message } = req.body;
-  const userId = req.user?.user_id;
+  const { user_message, receiver_id } = req.body;
+  const sender_id = req.user?.user_id;
   const created_at = new Date();
 
-  if (!user_message) {
-    return res.status(400).json({ error: "user_message is required" });
-  }
-
-  if (!userId) {
-    return res.status(401).json({ msg: "User ID missing from token" });
+  if (!user_message || !receiver_id) {
+    return res
+      .status(400)
+      .json({ error: "Message and receiver_id are required" });
   }
 
   try {
     const result = await db.query(
-      `INSERT INTO messages (user_id,  user_message, created_at)
-      VALUES ($1, $2, $3) RETURNING *`,
-      [userId, user_message, created_at]
+      `INSERT INTO messages (sender_id, receiver_id, user_message, created_at)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [sender_id, receiver_id, user_message, created_at]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error("Error creating chat:", error);
+    console.error("Error creating message:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -73,9 +72,13 @@ router.post("/messages", verifyToken, async (req, res) => {
 router.get("/messages/:user_id", verifyToken, async (req, res) => {
   const { user_id } = req.params;
 
+   if (parseInt(user_id, 10) !== req.user.user_id) {
+    return res.status(403).json({ error: "Access denied" });
+  }
+
   try {
     const result = await db.query(
-      `SELECT * FROM messages WHERE (user_id = $1 )ORDER BY created_at ASC`,
+      `SELECT * FROM messages WHERE (sender_id = $1 )ORDER BY created_at ASC`,
       [user_id]
     );
     res.json(result.rows);

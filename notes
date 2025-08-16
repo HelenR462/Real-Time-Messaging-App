@@ -35,3 +35,164 @@ The backend verifies the token on each request to ensure the user is authenticat
     "allowedHosts": ["localhost", ".localhost"],
     "proxy": "https://localhost:5000/"
   }
+
+
+// import React, { useEffect, useState, useCallback } from "react";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// import ChatDisplay from "./ChatHomePage/ChatDisplay";
+// import Chats from "./ChatHomePage/Chats";
+// import ChatUsers from "./ChatHomePage/ChatUsers";
+
+// function HomePage({ inputValue = {}, handleSendMessage }) {
+//   const [user, setUser] = useState(null);
+//   const [selectedUser, setSelectedUser] = useState(null);
+//   const [messages, setMessages] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   const navigate = useNavigate();
+
+//   console.log("User state:", user);
+
+//   const handleLogout = useCallback(() => {
+//     localStorage.removeItem("token");
+//     localStorage.removeItem("user");
+//     setSelectedUser();
+//     setMessages([]);
+//     setUser(null);
+//     setTimeout(() => {
+//       navigate("/");
+//     }, 2000);
+//   }, [navigate]);
+
+//   const storedUser = localStorage.getItem("user");
+//   console.log("storedUser:", storedUser);
+
+//   const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+//   console.log("parsedUser:", parsedUser);
+//      const token = localStorage.getItem("token");
+//     console.log("token:", token);
+//     console.log("TOKEN from localStorage:", localStorage.getItem("token"));
+
+
+//   // useEffect(() => {
+ 
+//   //   if (!parsedUser || !token) return;
+//   //   if (parsedUser && selectedUser?.user_id !== parsedUser.user_id) {
+//   //     setSelectedUser(parsedUser);
+//   //   }
+//   // }, [parsedUser, selectedUser, storedUser]);
+
+//   // const fetchUserData = async () => {
+//   //   try {
+//   //     const userRes = await axios.get(`/api/users/${parsedUser.user_id}`, {
+//   //       headers: { Authorization: `Bearer ${token}` },
+//   //     });
+
+//   //     console.log("Fetched user:", userRes.data);
+//   //     setUser(userRes.data);
+
+//   //     const messagesRes = await axios.get(
+//   //       `/api/messages/${parsedUser.user_id}`,
+//   //       {
+//   //         headers: { Authorization: `Bearer ${token}` },
+//   //       }
+//   //     );
+
+//   //     setMessages(messagesRes.data);
+//   //     setLoading(false);
+//   //   } catch (err) {
+//   //     if (err.response?.status === 403) {
+//   //       console.warn("Forbidden — wrong user or expired token.");
+//   //     } else {
+//   //       console.error("Fetch error:", err);
+//   //     }
+//   //   } finally {
+//   //     setLoading(false);
+//   //   }
+
+//   //   };
+
+// const fetchUserData = useCallback(async () => {
+//   try {
+//     const userRes = await axios.get(`/api/users/${parsedUser.user_id}`, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+
+//     console.log("Fetched user:", userRes.data);
+//     setUser(userRes.data);
+
+//     const messagesRes = await axios.get(
+//       `/api/messages/${parsedUser.user_id}`,
+//       {
+//         headers: { Authorization: `Bearer ${token}` },
+//       }
+//     );
+
+//     setMessages(messagesRes.data);
+//   } catch (err) {
+//     if (err.response?.status === 403) {
+//       console.warn("Forbidden — wrong user or expired token.");
+//     } else {
+//       console.error("Fetch error:", err);
+//     }
+//   } finally {
+//     setLoading(false);
+//   }
+// }, [parsedUser?.user_id, token]); 
+
+// useEffect(() => {
+//   if (parsedUser && token) {
+//     fetchUserData();
+//   }
+// }, [parsedUser, token, fetchUserData]); 
+
+
+
+//   return (
+//     <div className='home-page'>
+//       {loading ? (
+//         <p>Loading...</p>
+//       ) : (
+//         <div>
+//           <h1>Welcome, {user.user.username}</h1>
+
+//           {user?.image_url && (
+//             <img
+//               src={user.image_url}
+//               alt={user.username}
+//               className='profile-pic'
+//               onClick={() => setSelectedUser(user)}
+//             />
+//           )}
+//         </div>
+//       )}
+
+//       <button className='logout' onClick={handleLogout}>
+//         Log Out
+//       </button>
+
+//       <div>
+//         <ChatDisplay
+//           inputValue={inputValue}
+//           messages={messages}
+//           setMessages={setMessages}
+//           loggedInUser={parsedUser}
+//           selectedUser={selectedUser}
+//           setSelectedUser={setSelectedUser}
+//         />
+//         <Chats
+//           inputValue={inputValue}
+//           setChats={setMessages}
+//           messages={messages}
+//           selectedUser={selectedUser}
+//           setSelectedUser={setSelectedUser}
+//           loggedInUser={parsedUser}
+//           handleSendMessage={handleSendMessage}
+//         />
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default HomePage;

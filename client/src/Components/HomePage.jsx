@@ -5,22 +5,21 @@ import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
 
 function HomePage({ inputValue = {}, handleSendMessage }) {
-  const [user, setUser] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
-  console.log("User state:", user);
-
   const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    setSelectedUser();
+    localStorage.removeItem("selectedUser");
+    setSelectedUser(null);
     setMessages([]);
-    setUser(null);
+    setLoggedInUser(null);
+    setLoading(true);
     setTimeout(() => {
       navigate("/");
     }, 2000);
@@ -28,54 +27,44 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-    console.log("storedUser:", storedUser);
-    console.log("token:", token);
-
-    if (!storedUser || !token) {
-      setUser(null);
-      return;
+    if (storedUser) {
+      setLoggedInUser(JSON.parse(storedUser));
     }
 
-    let parsedUser = null;
-    try {
-      if (storedUser && storedUser !== "undefined") {
-        parsedUser = JSON.parse(storedUser);
-      }
-    } catch (err) {
-      console.error("Error parsing storedUser from localStorage:", err);
+    const storedSelected = localStorage.getItem("selectedUser");
+    if (storedSelected) {
+      setSelectedUser(JSON.parse(storedSelected));
     }
+  }, []);
 
-    if (!parsedUser) {
-      setUser(null);
-      return;
+  useEffect(() => {
+    if (selectedUser) {
+      localStorage.setItem("selectedUser", JSON.stringify(selectedUser));
     }
+  }, [selectedUser]);
 
-    const fetchUserData = async () => {
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const token = localStorage.getItem("token");
+      if (!token || !loggedInUser) return;
+
       try {
-        const response = await axios.get(`/api/users/${parsedUser.user_id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        console.log("Fetched user:", response.data);
-        setUser(response.data);
-
-        const messagesRes = await axios.get(
-          `/api/messages/${parsedUser.user_id}`,
+        const response = await axios.get(
+          `/api/messages/${loggedInUser.user_id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
-        setMessages(messagesRes.data);
+        setMessages(response.data);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching logged-in user:", err);
+        console.error("Error fetching messages:", err);
+        setLoading(false);
       }
     };
 
-    fetchUserData();
-  }, []);
+    fetchMessages();
+  }, [loggedInUser]);
 
   return (
     <div className='home-page'>
@@ -83,15 +72,7 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
         <p>Loading...</p>
       ) : (
         <div>
-          <h1>Welcome, {user.user.username}</h1>
-
-          {user?.image_url && (
-            <img
-              src={user.image_url}
-              alt={user.username}
-              className='profile-pic'
-            />
-          )}
+          <h1>Welcome, {loggedInUser?.username}</h1>
         </div>
       )}
 
@@ -104,12 +85,16 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
           inputValue={inputValue}
           messages={messages}
           setMessages={setMessages}
+          loggedInUser={loggedInUser}
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
         />
         <Chats
           inputValue={inputValue}
           setChats={setMessages}
           messages={messages}
           selectedUser={selectedUser}
+          loggedInUser={loggedInUser}
           handleSendMessage={handleSendMessage}
         />
       </div>
