@@ -47,7 +47,10 @@ function ChatDisplay({ selectedUser, messages = [], user, setSelectedUser }) {
           <ul className='messages-list'>
             {[...messages].reverse().map((message, index) => (
               <li key={message.id || `msg-${index}`} className='chat-card'>
-                <img src={getUserImage()} alt={getUserAlt()} />
+                <img src={getUserImage()} 
+                
+                // className='chat-card-image' 
+                alt={getUserAlt()} />
 
                 <div className='chat-card-content'>
                   <p className='chat-username'>
@@ -59,9 +62,9 @@ function ChatDisplay({ selectedUser, messages = [], user, setSelectedUser }) {
                 </div>
               </li>
             ))}
-          </ul>
-        )}
-      </div>
+          </ul> 
+         )}
+       </div>
     </div>
   );
 }

@@ -33,8 +33,8 @@ margin-left:15%;
 } 
 
 img{
-  height:50px;
-  width:50px;
+  height:30px;
+  width:30px;
   border-radius: 50%;
   /* border:1px solid #23a1a1f3 ; */
   margin:25px 0 0 20px;
@@ -71,34 +71,33 @@ li{
 .chat-card {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  padding: 10px;
   border: 2px solid rgba(226, 244, 244, 0.952);
   border-radius: 8px;
   background-color:rgba(226, 244, 244, 0.952); 
-  margin-right: 30px;
+  margin: 3px;
   
 }
 
 .chat-card-image {
-  width: 50px;
-  height: 50px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-top: -10px;
 }
 
 .chat-card-content {
   display: flex;
   flex-direction: column;
+  margin: 0 10px 10px 0;
 }
 
 .chat-username {
   font-weight: bold;
-  margin-bottom: 5px;
+  margin: 5px;
 }
 
 .chat-message {
-  margin: 0;
+  /* margin: 0; */
   font-size: 14px;
   color: #14bdbdf3;
 }
