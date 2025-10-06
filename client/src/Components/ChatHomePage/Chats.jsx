@@ -1,13 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { io } from "socket.io-client";
 import axios from "axios";
 import "./Chats.css";
+
+const socket = io("http://localhost:5000");
 
 function Chats({ setChats, selectedUser, loggedInUser }) {
   const [chatMessage, setChatMessage] = useState("");
   const [error, setError] = useState(null);
 
   const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-  const loggedInUsername= storedUser.username || "";
+  const loggedInUsername = storedUser.username || "";
+
+  useEffect(() => {
+    if (loggedInUser?.user_id) {
+      socket.emit("join", loggedInUser.user_id);
+    }
+
+    socket.on("receive_message", (message) => {
+      console.log("message received:", message);
+      setChats((prev) => [...prev, message]);
+    });
+
+    return () => {
+      socket.off("receive_message");
+    };
+  }, [loggedInUser, setChats]);
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
@@ -40,13 +58,9 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
       });
 
       if (response.data) {
-        setChats((prev) => [
-          ...prev,
-          {
-            ...response.data,
-            sender_username: loggedInUsername.username,
-          },
-        ]);
+        socket.emit("send_message", chatObj);
+
+        setChats((prev) => [...prev, response.data]);
         setChatMessage("");
         setError(null);
       }
@@ -59,7 +73,7 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
   return (
     <form onSubmit={handleCreateChat} className='new-chat-form'>
       <label>
-        {loggedInUsername.username}
+        {loggedInUsername}
         <input
           type='text'
           className='chat-input'

@@ -14,9 +14,9 @@ function ChatDisplay({ selectedUser, messages = [], user, setSelectedUser }) {
   }, []);
 
   const getUserImage = () => {
-    if (selectedUser?.image_url) {
-      return `http://localhost:5000${selectedUser.image_url}`;
-    }
+    // if (selectedUser?.image_url) {
+    //   return `http://localhost:5000${selectedUser.image_url}`;
+    // }
     if (loggedInUser?.image_url) {
       return `http://localhost:5000${user.image_url}`;
     }
@@ -47,10 +47,11 @@ function ChatDisplay({ selectedUser, messages = [], user, setSelectedUser }) {
           <ul className='messages-list'>
             {[...messages].reverse().map((message, index) => (
               <li key={message.id || `msg-${index}`} className='chat-card'>
-                <img src={getUserImage()} 
-                
-                // className='chat-card-image' 
-                alt={getUserAlt()} />
+                <img
+                  src={getUserImage()}
+                  className='chat-card-image'
+                  alt={getUserAlt()}
+                />
 
                 <div className='chat-card-content'>
                   <p className='chat-username'>
@@ -62,9 +63,9 @@ function ChatDisplay({ selectedUser, messages = [], user, setSelectedUser }) {
                 </div>
               </li>
             ))}
-          </ul> 
-         )}
-       </div>
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
