@@ -70,3 +70,5 @@ function ChatDisplay({ selectedUser, messages = [], user, setSelectedUser }) {
 }
 
 export default ChatDisplay;
+
+
