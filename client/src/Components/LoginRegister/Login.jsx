@@ -13,7 +13,8 @@ function Login({ inputValue = {}, setInputValue }) {
     console.log("Logging in with:", inputValue);
 
     try {
-      const response = await axios.post("/api/login", inputValue);
+      const response = await axios.post("http://localhost:5000/api/login", inputValue);
+
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));

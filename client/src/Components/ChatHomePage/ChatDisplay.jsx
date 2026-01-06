@@ -13,18 +13,18 @@ function ChatDisplay({ selectedUser, messages = [], user, setSelectedUser }) {
     }
   }, []);
 
-  const getUserImage = () => {
-    // if (selectedUser?.image_url) {
-    //   return `http://localhost:5000${selectedUser.image_url}`;
-    // }
-    if (loggedInUser?.image_url) {
-      return `http://localhost:5000${user.image_url}`;
+  const getUserImage = (senderId) => {
+    if (senderId === loggedInUser?.user_id) {
+      return loggedInUser?.image_url
+        ? `http://localhost:5000${loggedInUser.image_url}`
+        : "http://localhost:5000/public/assets/images/default.png";
+    } else if (senderId === selectedUser?.user_id) {
+      return selectedUser?.image_url
+        ? `http://localhost:5000${selectedUser.image_url}`
+        : "http://localhost:5000/public/assets/images/default.png";
     }
     return "http://localhost:5000/public/assets/images/default.png";
   };
-
-  console.log("selectedUser:", selectedUser);
-  console.log("loggedInUser:", loggedInUser);
 
   const getUserAlt = () => {
     return selectedUser?.username || loggedInUser?.username || "Default User";
@@ -48,16 +48,15 @@ function ChatDisplay({ selectedUser, messages = [], user, setSelectedUser }) {
             {[...messages].reverse().map((message, index) => (
               <li key={message.id || `msg-${index}`} className='chat-card'>
                 <img
-                  src={getUserImage()}
+                  src={getUserImage(message.sender_id)}
                   className='chat-card-image'
-                  alt={getUserAlt()}
+                  alt={getUserAlt(message.sender_id)}
                 />
-
                 <div className='chat-card-content'>
                   <p className='chat-username'>
                     {message.sender_id === loggedInUser?.user_id
                       ? loggedInUser.username
-                      : selectedUser?.username}
+                      : selectedUser?.username || "Unknown"}
                   </p>
                   <p className='chat-message'>{message.user_message}</p>
                 </div>

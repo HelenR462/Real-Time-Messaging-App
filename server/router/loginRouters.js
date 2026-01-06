@@ -7,15 +7,15 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 async function findUser(email) {
   const result = await db.query(
-    "SELECT user_id, username, email, password_hash FROM public.users WHERE email = $1",
-    [email]
+    "SELECT user_id, username, email, password_hash FROM public.users WHERE LOWER(email) = LOWER($1)", [email]
+
   );
 
   if (result.rows.length === 0) {
     throw new Error("User not found");
   }
 
-  return result.rows[0];
+   return result.rows[0] || null;
 }
 
 router.post("/login", async (req, res) => {
@@ -43,6 +43,8 @@ router.post("/login", async (req, res) => {
       user: {
         user_id: user.user_id,
         username: user.username,
+        email: user.email,
+        image_url: user.image_url,
       },
     });
   } catch (error) {

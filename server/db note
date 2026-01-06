@@ -1,3 +1,5 @@
+CREATE DATABSE ChatApp
+
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY, 
   username VARCHAR(50) NOT NULL, 
@@ -7,7 +9,7 @@ CREATE TABLE users (
   SELECT CURRENT_DATE();
 );
 
-INSERT INTO users (user_id, user_name, email, passwordhash,image_url, timestamp) VALUES ($1, $2, $3, $4);
+-- INSERT INTO users (user_id, user_name, email, passwordhash,image_url, timestamp) VALUES ($1, $2, $3, $4);
 
 CREATE TABLE messages (
   id SERIAL PRIMARY KEY,
@@ -17,6 +19,6 @@ CREATE TABLE messages (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO messages ( sender_id, receiver_id, user_message, created_date) VALUES ($1);
+-- INSERT INTO messages ( sender_id, receiver_id, user_message, created_date) VALUES ($1);
 
 
