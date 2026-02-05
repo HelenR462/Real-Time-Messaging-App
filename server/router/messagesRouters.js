@@ -78,7 +78,7 @@ router.get("/messages/:user_id", verifyToken, async (req, res) => {
 
   try {
     const result = await db.query(
-      `SELECT * FROM messages WHERE (sender_id = $1 )ORDER BY created_at ASC`,
+      `SELECT * FROM public.messages WHERE (sender_id = $1 )ORDER BY created_at ASC`,
       [user_id]
     );
     res.json(result.rows);

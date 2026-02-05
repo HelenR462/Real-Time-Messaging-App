@@ -53,7 +53,7 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
           `/api/messages/${loggedInUser.user_id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
         setMessages(response.data);
         setLoading(false);

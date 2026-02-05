@@ -9,8 +9,7 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
   const [chatMessage, setChatMessage] = useState("");
   const [error, setError] = useState(null);
 
-  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-  const loggedInUsername = storedUser.username || "";
+   const loggedInUsername = loggedInUser?.username || "";
 
   useEffect(() => {
     if (loggedInUser?.user_id) {

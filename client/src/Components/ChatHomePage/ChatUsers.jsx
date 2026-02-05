@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ChatUsers.css";
 
-const ChatUsers = ({ setSelectedUser }) => {
+const ChatUsers = ({ selectedUser, setSelectedUser }) => {
   const [remainingUsers, setRemainingUsers] = useState([]);
   const prevUsersRef = useRef([]);
-  const token = localStorage.getItem("token");
+   const token = localStorage.getItem("token");
 
   useEffect(() => {
+   
     const fetchUsers = async () => {
       if (!token) return;
 
@@ -25,13 +26,13 @@ const ChatUsers = ({ setSelectedUser }) => {
         const prevUsers = prevUsersRef.current;
 
         if (JSON.stringify(newUsers) !== JSON.stringify(prevUsers)) {
-          setRemainingUsers(response.data || []);
+          setRemainingUsers(newUsers);
           prevUsersRef.current = newUsers;
         }
       } catch (err) {
         console.error(
           "Error fetching users:",
-          err.response?.data || err.message
+          err.response?.data || err.message,
         );
       }
     };
@@ -45,19 +46,24 @@ const ChatUsers = ({ setSelectedUser }) => {
         remainingUsers.map((user) => (
           <div
             key={user.user_id}
-            className='user'
-            onClick={() =>
+            className= "user"
+             onClick={() =>
               setSelectedUser({
                 user_id: user.user_id,
                 username: user.username,
-                image_url: user.image_url,
+                image_url: selectedUser?.image_url,
               })
             }
           >
             <img
-              src={`http://localhost:5000${user.image_url}`}
+              src={
+                user.image_url
+                  ? `http://localhost:5000${selectedUser?.image_url}`
+                  : "http://localhost:5000/assets/images/default.png"
+              }
               alt={user.username}
             />
+
             <span className='users'>{user.username}</span>
           </div>
         ))
