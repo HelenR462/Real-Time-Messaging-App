@@ -15,9 +15,6 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
   const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    localStorage.removeItem("selectedUser");
-    setSelectedUser(null);
-    setMessages([]);
     setLoggedInUser(null);
     setLoading(true);
     setTimeout(() => {
@@ -26,9 +23,23 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
   }, [navigate]);
 
   useEffect(() => {
+    console.log("LOGGED IN USER:", loggedInUser);
+  }, [loggedInUser]);
+
+  useEffect(() => {
     const storedUser = localStorage.getItem("user");
+
     if (storedUser) {
-      setLoggedInUser(JSON.parse(storedUser));
+    const parsedUser = (JSON.parse(storedUser));
+
+      const addUserImage = {
+        ...parsedUser,
+        image_url: parsedUser.image_url?.startsWith("/")
+          ? parsedUser.image_url
+          : `/assets/images/${parsedUser.image_url}`,
+      };
+
+      setLoggedInUser(addUserImage);
     }
 
     const storedSelected = localStorage.getItem("selectedUser");

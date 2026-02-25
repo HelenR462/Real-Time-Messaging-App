@@ -22,7 +22,7 @@ router.get("/users/username/:username", async (req, res) => {
   try {
     const result = await db.query(
       "SELECT * FROM public.users WHERE LOWER(username) = LOWER($1)",
-      [username]
+      [username],
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "User not found" });
@@ -34,9 +34,32 @@ router.get("/users/username/:username", async (req, res) => {
   }
 });
 
-router.get("/messages", async (req, res) => {
+router.get("/messages", verifyToken, async (req, res) => {
+  const loggedInUserId = req.user.user_id;
+  const { selectedUserId } = req.query;
+
+  if (!selectedUserId) {
+    return res.status(400).json({ error: "selectedUserId is required" });
+  }
   try {
-    const result = await db.query(`SELECT * FROM public.messages`);
+    const result = await db.query(
+      `
+  SELECT 
+    messages.id,
+    messages.user_message,
+    messages.sender_id,
+    messages.receiver_id,
+    messages.created_at,
+    user.username AS sender_username,
+    user.image_url AS sender_image
+  FROM messages messages
+  JOIN users user ON messages.sender_id = user.user_id
+  WHERE (messages.sender_id = $1 AND messages.receiver_id = $2)
+     OR (messages.sender_id = $2 AND messages.receiver_id = $1)
+  ORDER BY messages.created_at ASC
+`,
+      [loggedInUserId, selectedUserId],
+    );
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching messages:", error);
@@ -60,7 +83,7 @@ router.post("/messages", verifyToken, async (req, res) => {
       `INSERT INTO messages (sender_id, receiver_id, user_message, created_at)
        VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [sender_id, receiver_id, user_message, created_at]
+      [sender_id, receiver_id, user_message, created_at],
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -72,14 +95,14 @@ router.post("/messages", verifyToken, async (req, res) => {
 router.get("/messages/:user_id", verifyToken, async (req, res) => {
   const { user_id } = req.params;
 
-   if (parseInt(user_id, 10) !== req.user.user_id) {
+  if (parseInt(user_id, 10) !== req.user.user_id) {
     return res.status(403).json({ error: "Access denied" });
   }
 
   try {
     const result = await db.query(
-      `SELECT * FROM public.messages WHERE (sender_id = $1 )ORDER BY created_at ASC`,
-      [user_id]
+      `SELECT * FROM public.messages WHERE sender_id = $1 OR receiver_id = $1 ORDER BY created_at ASC`,
+      [user_id],
     );
     res.json(result.rows);
   } catch (error) {

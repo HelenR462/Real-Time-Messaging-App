@@ -2,13 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ChatUsers.css";
 
-const ChatUsers = ({ selectedUser, setSelectedUser }) => {
+const ChatUsers = ({ selectedUser, setSelectedUser,loggedInUser }) => {
   const [remainingUsers, setRemainingUsers] = useState([]);
   const prevUsersRef = useRef([]);
-   const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+
+  const filteredUsers = remainingUsers.filter(
+  (user) => user.user_id !== loggedInUser?.user_id
+);
+
 
   useEffect(() => {
-   
     const fetchUsers = async () => {
       if (!token) return;
 
@@ -43,22 +47,22 @@ const ChatUsers = ({ selectedUser, setSelectedUser }) => {
   return (
     <div className='user-list'>
       {remainingUsers.length > 0 ? (
-        remainingUsers.map((user) => (
+        filteredUsers.map((user) => (
           <div
             key={user.user_id}
-            className= "user"
-             onClick={() =>
+            className='user'
+            onClick={() =>
               setSelectedUser({
                 user_id: user.user_id,
                 username: user.username,
-                image_url: selectedUser?.image_url,
+                image_url: user.image_url,
               })
             }
           >
             <img
               src={
                 user.image_url
-                  ? `http://localhost:5000${selectedUser?.image_url}`
+                  ? `http://localhost:5000${user.image_url}`
                   : "http://localhost:5000/assets/images/default.png"
               }
               alt={user.username}

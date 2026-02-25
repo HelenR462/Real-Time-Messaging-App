@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 async function findUser(email) {
   const result = await db.query(
-    "SELECT user_id, username, email, password_hash FROM public.users WHERE LOWER(email) = LOWER($1)", [email]
+    "SELECT user_id, username, email, password_hash, image_url FROM public.users WHERE LOWER(email) = LOWER($1)", [email]
 
   );
 
