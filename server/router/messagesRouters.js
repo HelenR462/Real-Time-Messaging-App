@@ -79,18 +79,44 @@ router.post("/messages", verifyToken, async (req, res) => {
   }
 
   try {
-    const result = await db.query(
-      `INSERT INTO messages (sender_id, receiver_id, user_message, created_at)
-       VALUES ($1, $2, $3, $4)
-       RETURNING *`,
-      [sender_id, receiver_id, user_message, created_at],
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error("Error creating message:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+      const result = await db.query(
+        `INSERT INTO messages (sender_id, receiver_id, user_message, created_at)
+         VALUES ($1, $2, $3, $4)
+         RETURNING *`,
+        [sender_id, receiver_id, user_message, created_at],
+      );
+      res.status(201).json(result.rows[0]);
+    } catch (error) {
+      console.error("Error creating message:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+//     const result = await db.query(
+//       `
+//   INSERT INTO messages (sender_id, receiver_id, user_message, created_at)
+//   VALUES ($1, $2, $3, $4)
+//   RETURNING id, user_message, sender_id, receiver_id, created_at
+//   `,
+//       [sender_id, receiver_id, user_message, created_at],
+//     );
+
+//     const message = result.rows[0];
+
+//     const senderResult = await db.query(
+//       `SELECT username, image_url FROM users WHERE user_id = $1`,
+//       [sender_id],
+//     );
+
+//     res.status(201).json({
+//       ...message,
+//       sender_username: senderResult.rows[0].username,
+//       sender_image: senderResult.rows[0].image_url,
+//     });
+//   } catch (error) {
+//     console.error("Error creating message:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 router.get("/messages/:user_id", verifyToken, async (req, res) => {
   const { user_id } = req.params;

@@ -2,15 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ChatUsers.css";
 
-const ChatUsers = ({ selectedUser, setSelectedUser,loggedInUser }) => {
+const ChatUsers = ({ selectedUser, setSelectedUser, loggedInUser }) => {
   const [remainingUsers, setRemainingUsers] = useState([]);
   const prevUsersRef = useRef([]);
   const token = localStorage.getItem("token");
 
   const filteredUsers = remainingUsers.filter(
-  (user) => user.user_id !== loggedInUser?.user_id
-);
-
+    (user) => user.user_id !== loggedInUser?.user_id,
+  );
 
   useEffect(() => {
     const fetchUsers = async () => {

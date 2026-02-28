@@ -39,6 +39,8 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
       return;
     }
 
+    console.log("Listener registered");
+
     const token = localStorage.getItem("token");
     if (!token) {
       setError("Authentication token missing.");
@@ -57,9 +59,7 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
       });
 
       if (response.data) {
-        socket.emit("send_message", chatObj);
-
-        setChats((prev) => [...prev, response.data]);
+        socket.emit("send_message", response.data);
         setChatMessage("");
         setError(null);
       }

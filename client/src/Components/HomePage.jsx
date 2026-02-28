@@ -30,7 +30,7 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
     const storedUser = localStorage.getItem("user");
 
     if (storedUser) {
-    const parsedUser = (JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
 
       const addUserImage = {
         ...parsedUser,
@@ -75,7 +75,7 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
     };
 
     fetchMessages();
-  }, [loggedInUser]);
+  }, [loggedInUser, selectedUser]);
 
   return (
     <div className='home-page'>
