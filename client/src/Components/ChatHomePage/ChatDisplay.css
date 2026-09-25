@@ -101,11 +101,28 @@ li{
   color: #14bdbdf3;
 }
 
-.messages-list{
+/* .messages-list{
   height:calc(112% - 40px);
   padding-bottom: 40px;
   overflow-y: scroll;
   display:flex;
   flex-direction:column;
  
+} */
+
+.messages-list {
+  /* height: 400px;        */
+   height:calc(112% - 40px);
+  overflow-y: auto;    
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sender {
+  justify-content: flex-end;
+}
+
+.receiver {
+  justify-content: flex-start;
 }

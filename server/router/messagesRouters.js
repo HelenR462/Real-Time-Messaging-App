@@ -45,18 +45,18 @@ router.get("/messages", verifyToken, async (req, res) => {
     const result = await db.query(
       `
   SELECT 
-    messages.id,
-    messages.user_message,
-    messages.sender_id,
-    messages.receiver_id,
-    messages.created_at,
-    user.username AS sender_username,
-    user.image_url AS sender_image
-  FROM messages messages
-  JOIN users user ON messages.sender_id = user.user_id
-  WHERE (messages.sender_id = $1 AND messages.receiver_id = $2)
-     OR (messages.sender_id = $2 AND messages.receiver_id = $1)
-  ORDER BY messages.created_at ASC
+    m.message_id,
+    m.user_message,
+    m.sender_id,
+    m.receiver_id,
+    m.created_at,
+    u.username AS sender_username,
+    u.image_url AS sender_image
+  FROM messages m
+  JOIN users u ON m.sender_id = u.user_id
+  WHERE (m.sender_id = $1 AND m.receiver_id = $2)
+     OR (m.sender_id = $2 AND m.receiver_id = $1)
+  ORDER BY m.created_at ASC
 `,
       [loggedInUserId, selectedUserId],
     );
@@ -68,9 +68,16 @@ router.get("/messages", verifyToken, async (req, res) => {
 });
 
 router.post("/messages", verifyToken, async (req, res) => {
+console.log("REQUEST BODY:", req.body);
+
   const { user_message, receiver_id } = req.body;
   const sender_id = req.user?.user_id;
   const created_at = new Date();
+
+  // console.log("user_message:", user_message);
+  // console.log("receiver_id:", receiver_id);
+  // console.log("sender_id:", sender_id);
+
 
   if (!user_message || !receiver_id) {
     return res
@@ -79,44 +86,18 @@ router.post("/messages", verifyToken, async (req, res) => {
   }
 
   try {
-      const result = await db.query(
-        `INSERT INTO messages (sender_id, receiver_id, user_message, created_at)
+    const result = await db.query(
+      `INSERT INTO messages (sender_id, receiver_id, user_message, created_at)
          VALUES ($1, $2, $3, $4)
          RETURNING *`,
-        [sender_id, receiver_id, user_message, created_at],
-      );
-      res.status(201).json(result.rows[0]);
-    } catch (error) {
-      console.error("Error creating message:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
-//     const result = await db.query(
-//       `
-//   INSERT INTO messages (sender_id, receiver_id, user_message, created_at)
-//   VALUES ($1, $2, $3, $4)
-//   RETURNING id, user_message, sender_id, receiver_id, created_at
-//   `,
-//       [sender_id, receiver_id, user_message, created_at],
-//     );
-
-//     const message = result.rows[0];
-
-//     const senderResult = await db.query(
-//       `SELECT username, image_url FROM users WHERE user_id = $1`,
-//       [sender_id],
-//     );
-
-//     res.status(201).json({
-//       ...message,
-//       sender_username: senderResult.rows[0].username,
-//       sender_image: senderResult.rows[0].image_url,
-//     });
-//   } catch (error) {
-//     console.error("Error creating message:", error);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// });
+      [sender_id, receiver_id, user_message, created_at],
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error creating message:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 router.get("/messages/:user_id", verifyToken, async (req, res) => {
   const { user_id } = req.params;

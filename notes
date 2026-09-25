@@ -7,8 +7,8 @@ The user enters their email and password on the login page and submits the form.
 <!-- #2 Frontend Sends Login Request: -->
 The frontend sends an HTTP POST request to the backend with the user's credentials.
 
-<!-- #3 Backend Receives Login Request: -->
-The backend receives the login request and extracts the email and password.
+<!-- #3 Backend receieves Login Request: -->
+The backend receieves the login request and extracts the email and password.
 
 <!-- #4 Backend Fetches User Data: -->
 The backend queries the database to fetch the user record corresponding to the provided email.

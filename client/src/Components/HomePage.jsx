@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import  { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ChatDisplay from "./ChatHomePage/ChatDisplay";
@@ -57,16 +57,19 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
   useEffect(() => {
     const fetchMessages = async () => {
       const token = localStorage.getItem("token");
-      if (!token || !loggedInUser) return;
+
+      if (!token || !loggedInUser || !selectedUser) return;
 
       try {
-        const response = await axios.get(
-          `/api/messages/${loggedInUser.user_id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
+        const response = await axios.get("/api/messages", {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+            selectedUserId: selectedUser.user_id,
           },
-        );
+        });
+
         setMessages(response.data);
+        console.log("Fetched messages:", response.data);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching messages:", err);

@@ -52,22 +52,29 @@ pool
     console.error("Failed to connect to PostgreSQL:", err.message);
     process.exit(1);
   });
-
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
   socket.on("join", (userId) => {
     console.log(`User ${userId} joined with socket ${socket.id}`);
-    socket.join(userId);
+    socket.join(String(userId));
   });
 
   socket.on("send_message", (message) => {
     console.log("Message received:", message);
-    io.to(message.receiver_id).emit("receive_message", message);
+
+      console.log("socket send:", message);
+
+     console.log("Sending to sender room:", String(message.sender_id));
+  console.log("Sending to receiver room:", String(message.receiver_id));
+
+    
+      io.to(String(message.sender_id)).emit("receive_message", message);
+    io.to(String(message.receiver_id)).emit("receive_message", message);
   });
 
   socket.on("disconnect", () => {
-    console.log(" User disconnected:", socket.id);
+    console.log("User disconnected:", socket.id);
   });
 });
 

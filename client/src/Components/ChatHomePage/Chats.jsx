@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
 import "./Chats.css";
@@ -9,22 +9,40 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
   const [chatMessage, setChatMessage] = useState("");
   const [error, setError] = useState(null);
 
-   const loggedInUsername = loggedInUser?.username || "";
+  const loggedInUsername = loggedInUser?.username || "";
 
-  useEffect(() => {
-    if (loggedInUser?.user_id) {
-      socket.emit("join", loggedInUser.user_id);
-    }
+  // useEffect(() => {
+  //   if (loggedInUser?.user_id) {
+  //     socket.emit("join", loggedInUser.user_id);
+  //   }
 
-    socket.on("receive_message", (message) => {
-      console.log("message received:", message);
-      setChats((prev) => [...prev, message]);
-    });
+  //   socket.on("receive_message", (message) => {
+  //     console.log("message d:", message);
+  //     setChats((prev) => [...prev, message ]);
+  //   });
 
-    return () => {
-      socket.off("receive_message");
-    };
-  }, [loggedInUser, setChats]);
+  //   // return () => {
+  //   //   socket.off("message");
+  //   // };
+  // }, [loggedInUser, setChats]);
+
+useEffect(() => {
+  if (!loggedInUser?.user_id) return;
+
+  socket.emit("join", loggedInUser.user_id);
+
+  const handleReceiveMessage = (message) => {
+    console.log("RECEIVED ON FRONTEND:", message);
+
+    setChats((prev) => [message, ...prev]);
+  };
+
+  socket.on("receive_message", handleReceiveMessage);
+
+  return () => {
+    socket.off("receive_message", handleReceiveMessage);
+  };
+}, [loggedInUser?.user_id, setChats]);
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
@@ -53,6 +71,8 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
       user_message: chatMessage,
     };
 
+    console.log("Sending:", chatObj);
+
     try {
       const response = await axios.post("/api/messages", chatObj, {
         headers: { Authorization: `Bearer ${token}` },
@@ -65,7 +85,9 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
       }
     } catch (err) {
       console.error("Error creating chat:", err);
+     
       setError(err.response?.data?.error || "Error sending message.");
+     
     }
   };
 
