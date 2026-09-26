@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Real-Time-Messaging-App",
   "private": true,
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
     "server": "npm start --prefix server",
     "client": "npm start --prefix client",
