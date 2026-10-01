@@ -61,7 +61,7 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
       if (!token || !loggedInUser || !selectedUser) return;
 
       try {
-        const response = await axios.get("/api/messages", {
+        const response = await axios.get("https://real-time-messaging-app-20-tml4.onrender.com/api/messages", {
           headers: { Authorization: `Bearer ${token}` },
           params: {
             selectedUserId: selectedUser.user_id,

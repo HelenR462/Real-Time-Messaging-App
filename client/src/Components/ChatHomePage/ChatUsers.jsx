@@ -16,11 +16,14 @@ const ChatUsers = ({ selectedUser, setSelectedUser, loggedInUser }) => {
       if (!token) return;
 
       try {
-        const response = await axios.get("/api/users", {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await axios.get(
+          "https://real-time-messaging-app-20-tml4.onrender.com/api/users",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         const newUsers = Array.isArray(response.data)
           ? response.data
