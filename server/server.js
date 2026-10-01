@@ -34,22 +34,22 @@ app.use("/api", registerRoutes);
 app.use("/api", messagesRoutes);
 app.use("/api", usersRoutes);
 
-// console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
-// console.log(
-//   "DATABASE_URL starts with:",
-//   process.env.DATABASE_URL
-//     ? process.env.DATABASE_URL.substring(0, 20)
-//     : "NOT SET",
-// );
+console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
+console.log(
+  "DATABASE_URL starts with:",
+  process.env.DATABASE_URL
+    ? process.env.DATABASE_URL.substring(0, 20)
+    : "NOT SET",
+);
 
 const pool = new Pool({
-  user: process.env.USER,
-  host: process.env.HOST,
-  database: process.env.DATABASE,
-  password: process.env.PASSWORD,
-  port: process.env.PORT,
+  // user: process.env.USER,
+  // host: process.env.HOST,
+  // database: process.env.DATABASE,
+  // password: process.env.PASSWORD,
+  // port: process.env.PORT,
 
-  // connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL,
 });
 
 pool
