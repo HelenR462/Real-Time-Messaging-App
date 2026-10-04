@@ -17,7 +17,7 @@ const ChatUsers = ({ selectedUser, setSelectedUser, loggedInUser }) => {
 
       try {
         const response = await axios.get(
-          "https://real-time-messaging-app-20-tml4.onrender.com/api/users",
+         `${process.env.REACT_APP_API_URL}/api/users`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import axios from "axios";
 import "./Chats.css";
 
-const socket = io("http://localhost:5000");
+const socket = io(process.env.REACT_APP_API_URL);
 
 function Chats({ setChats, selectedUser, loggedInUser }) {
   const [chatMessage, setChatMessage] = useState("");
@@ -74,7 +74,7 @@ useEffect(() => {
     console.log("Sending:", chatObj);
 
     try {
-      const response = await axios.post("/api/messages", chatObj, {
+      const response = await axios.post(`${API_URL}/api/messages`, chatObj, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

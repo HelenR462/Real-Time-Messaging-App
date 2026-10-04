@@ -14,9 +14,12 @@ const usersRoutes = require("./router/usersRouters");
 
 const app = express();
 const server = http.createServer(app);
+
+const CLIENT_URL = process.env.CLIENT_URL;
+
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: CLIENT_URL,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -24,8 +27,15 @@ const io = new Server(server, {
 
 const port = process.env.PORT || 5000;
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(
+  cors({
+    origin: CLIENT_URL,
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.json());
@@ -35,20 +45,8 @@ app.use("/api", messagesRoutes);
 app.use("/api", usersRoutes);
 
 console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
-console.log(
-  "DATABASE_URL starts with:",
-  process.env.DATABASE_URL
-    ? process.env.DATABASE_URL.substring(0, 20)
-    : "NOT SET",
-);
 
 const pool = new Pool({
-  // user: process.env.USER,
-  // host: process.env.HOST,
-  // database: process.env.DATABASE,
-  // password: process.env.PASSWORD,
-  // port: process.env.PORT,
-
   connectionString: process.env.DATABASE_URL,
 });
 
