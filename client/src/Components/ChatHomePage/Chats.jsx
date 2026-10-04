@@ -3,7 +3,9 @@ import { io } from "socket.io-client";
 import axios from "axios";
 import "./Chats.css";
 
-const socket = io(process.env.REACT_APP_API_URL);
+const API_URL = process.env.REACT_APP_API_URL;
+
+const socket = io(API_URL);
 
 function Chats({ setChats, selectedUser, loggedInUser }) {
   const [chatMessage, setChatMessage] = useState("");
