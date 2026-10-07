@@ -1,8 +1,24 @@
 const { Pool } = require("pg");
 require("dotenv").config();
 
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+// });
+const dbUrl = process.env.DATABASE_URL;
+
+if (dbUrl) {
+  const parsed = new URL(dbUrl);
+
+  console.log("DB USER:", parsed.username);
+  console.log("DB HOST:", parsed.hostname);
+  console.log("DB PORT:", parsed.port);
+  console.log("DB NAME:", parsed.pathname);
+} else {
+  console.log("DATABASE_URL is NOT SET");
+}
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: dbUrl,
 });
 
 pool.on("connect", () => {
