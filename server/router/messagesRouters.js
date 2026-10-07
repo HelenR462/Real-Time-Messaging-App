@@ -74,9 +74,9 @@ console.log("REQUEST BODY:", req.body);
   const sender_id = req.user?.user_id;
   const created_at = new Date();
 
-  // console.log("user_message:", user_message);
-  // console.log("receiver_id:", receiver_id);
-  // console.log("sender_id:", sender_id);
+  console.log("user_message:", user_message);
+  console.log("receiver_id:", receiver_id);
+  console.log("sender_id:", sender_id);
 
 
   if (!user_message || !receiver_id) {

@@ -16,15 +16,6 @@ const app = express();
 const server = http.createServer(app);
 
 const CLIENT_URL = process.env.CLIENT_URL;
-
-const io = new Server(server, {
-  cors: {
-    origin: CLIENT_URL,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
-
 const port = process.env.PORT || 5000;
 
 app.use(
@@ -38,11 +29,14 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(express.json());
 app.use("/api", loginRoutes);
 app.use("/api", registerRoutes);
 app.use("/api", messagesRoutes);
 app.use("/api", usersRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Real-Time Messaging Server is running!");
+});
 
 console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
 
@@ -62,6 +56,15 @@ pool
     console.error("PG error code:", err.code);
     process.exit(1);
   });
+
+const io = new Server(server, {
+  cors: {
+    origin: CLIENT_URL,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
@@ -85,6 +88,10 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
   });
+});
+
+app.get("/", (req, res) => {
+  res.send("Real-Time Messaging Server is running!");
 });
 
 server.listen(port, () => {
