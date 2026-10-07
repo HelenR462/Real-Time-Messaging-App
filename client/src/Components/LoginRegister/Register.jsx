@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "./LoginRegister.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function Register({ inputValue, setInputValue }) {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -11,7 +13,7 @@ function Register({ inputValue, setInputValue }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/register", inputValue);
+      const response = await axios.post(`${API_URL}/api/login`, inputValue);
 
       if (response.status === 201) {
         setMessage(response.data.message);

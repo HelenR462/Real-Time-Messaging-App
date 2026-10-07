@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "./LoginRegister.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function Login({ inputValue = {}, setInputValue }) {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -13,7 +15,7 @@ function Login({ inputValue = {}, setInputValue }) {
     console.log("Logging in with:", inputValue);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/login", inputValue);
+      const response = await axios.post(`${API_URL}/api/login`, inputValue);
 
 
       localStorage.setItem("token", response.data.token);
