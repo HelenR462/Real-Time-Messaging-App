@@ -1,6 +1,8 @@
 import "../ChatHomePage/ChatDisplay.css";
 import ChatUsers from "./ChatUsers";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function ChatDisplay({
   selectedUser,
   loggedInUser,
@@ -29,8 +31,8 @@ function ChatDisplay({
                 <img
                   src={
                     message.sender_id === loggedInUser?.user_id
-                      ? `http://localhost:5000${loggedInUser?.image_url}`
-                      : `http://localhost:5000${selectedUser?.image_url}`
+                      ? `${API_URL}${loggedInUser?.image_url}`
+                      : `${API_URL}${selectedUser?.image_url}`
                   }
                   className='chat-card-image'
                   alt={

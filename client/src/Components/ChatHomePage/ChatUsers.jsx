@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ChatUsers.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const ChatUsers = ({ selectedUser, setSelectedUser, loggedInUser }) => {
   const [remainingUsers, setRemainingUsers] = useState([]);
   const prevUsersRef = useRef([]);
@@ -16,14 +18,11 @@ const ChatUsers = ({ selectedUser, setSelectedUser, loggedInUser }) => {
       if (!token) return;
 
       try {
-        const response = await axios.get(
-         `${process.env.REACT_APP_API_URL}/api/users`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await axios.get(`${API_URL}/api/users`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         const newUsers = Array.isArray(response.data)
           ? response.data
@@ -64,8 +63,8 @@ const ChatUsers = ({ selectedUser, setSelectedUser, loggedInUser }) => {
             <img
               src={
                 user.image_url
-                  ? `http://localhost:5000${user.image_url}`
-                  : "http://localhost:5000/assets/images/default.png"
+                  ? `${API_URL}${user.image_url}`
+                  : "${API_URL}/assets/images/default.png"
               }
               alt={user.username}
             />
