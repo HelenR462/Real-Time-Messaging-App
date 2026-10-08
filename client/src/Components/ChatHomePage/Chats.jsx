@@ -5,6 +5,8 @@ import "./Chats.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+console.log("SOCKET API_URL:", API_URL);
+
 const socket = io(API_URL);
 
 function Chats({ setChats, selectedUser, loggedInUser }) {
@@ -13,38 +15,23 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
 
   const loggedInUsername = loggedInUser?.username || "";
 
-  // useEffect(() => {
-  //   if (loggedInUser?.user_id) {
-  //     socket.emit("join", loggedInUser.user_id);
-  //   }
+  useEffect(() => {
+    if (!loggedInUser?.user_id) return;
 
-  //   socket.on("receive_message", (message) => {
-  //     console.log("message d:", message);
-  //     setChats((prev) => [...prev, message ]);
-  //   });
+    socket.emit("join", loggedInUser.user_id);
 
-  //   // return () => {
-  //   //   socket.off("message");
-  //   // };
-  // }, [loggedInUser, setChats]);
+    const handleReceiveMessage = (message) => {
+      console.log("RECEIVED ON FRONTEND:", message);
 
-useEffect(() => {
-  if (!loggedInUser?.user_id) return;
+      setChats((prev) => [message, ...prev]);
+    };
 
-  socket.emit("join", loggedInUser.user_id);
+    socket.on("receive_message", handleReceiveMessage);
 
-  const handleReceiveMessage = (message) => {
-    console.log("RECEIVED ON FRONTEND:", message);
-
-    setChats((prev) => [message, ...prev]);
-  };
-
-  socket.on("receive_message", handleReceiveMessage);
-
-  return () => {
-    socket.off("receive_message", handleReceiveMessage);
-  };
-}, [loggedInUser?.user_id, setChats]);
+    return () => {
+      socket.off("receive_message", handleReceiveMessage);
+    };
+  }, [loggedInUser?.user_id, setChats]);
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
@@ -87,9 +74,8 @@ useEffect(() => {
       }
     } catch (err) {
       console.error("Error creating chat:", err);
-     
+
       setError(err.response?.data?.error || "Error sending message.");
-     
     }
   };
 
