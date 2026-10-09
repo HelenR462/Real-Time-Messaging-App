@@ -1,20 +1,30 @@
-const { Pool } = require("pg");
 require("dotenv").config();
 
+const { Pool } = require("pg");
+
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error("DATABASE_URL is missing");
+}
+
+const dbUrl = new URL(connectionString);
+
+console.log("PostgreSQL host:", dbUrl.hostname);
+console.log(
+  "PostgreSQL SSL mode:",
+  dbUrl.searchParams.get("sslmode") || "not specified",
+);
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString,
   ssl: {
     rejectUnauthorized: false,
   },
 });
-pool
-  .connect()
-  .then((client) => {
-    console.log("Connected to PostgreSQL with SSL");
-    client.release();
-  })
-  .catch((err) => {
-    console.error("Failed to connect to PostgreSQL:", err);
-  });
+
+pool.on("error", (err) => {
+  console.error("PostgreSQL pool error:", err.message, err.code);
+});
 
 module.exports = pool;
