@@ -34,10 +34,6 @@ app.use("/api", registerRoutes);
 app.use("/api", messagesRoutes);
 app.use("/api", usersRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Real-Time Messaging Server is running!");
-});
-
 console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
 
 const pool = new Pool({
