@@ -6,24 +6,23 @@ const db = require("../db");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 async function findUser(email) {
-const check = await pool.query(`
+  const check = await db.query(`
   SELECT current_database() AS database_name,
          current_schema() AS schema_name,
-         to_regclass('public.users') AS users_table
-`);
+         to_regclass('public.users') AS users_table`);
 
-console.log("Login database check:", check.rows[0]);
+  console.log("Login database check:", check.rows[0]);
 
   const result = await db.query(
-    "SELECT user_id, username, email, password_hash, image_url FROM public.users WHERE LOWER(email) = LOWER($1)", [email]
-
+    "SELECT user_id, username, email, password_hash, image_url FROM public.users WHERE LOWER(email) = LOWER($1)",
+    [email],
   );
 
   if (result.rows.length === 0) {
     throw new Error("User not found");
   }
 
-   return result.rows[0] || null;
+  return result.rows[0] || null;
 }
 
 router.post("/login", async (req, res) => {
@@ -42,7 +41,7 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(
       { user_id: user.user_id, username: user.username },
       JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     res.json({
