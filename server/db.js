@@ -16,6 +16,12 @@ if (!connectionString) {
 //   dbUrl.searchParams.get("sslmode") || "not specified",
 // );
 
+const parsedUrl = new URL(connectionString);
+
+console.log("DB hostname:", parsedUrl.hostname);
+console.log("DB SSL mode:", parsedUrl.searchParams.get("sslmode"));
+console.log("SSL configuration enabled:", true);
+
 const pool = new Pool({
   connectionString,
   ssl: {
