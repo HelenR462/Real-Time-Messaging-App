@@ -8,13 +8,13 @@ if (!connectionString) {
   throw new Error("DATABASE_URL is missing");
 }
 
-const dbUrl = new URL(connectionString);
+// const dbUrl = new URL(connectionString);
 
-console.log("PostgreSQL host:", dbUrl.hostname);
-console.log(
-  "PostgreSQL SSL mode:",
-  dbUrl.searchParams.get("sslmode") || "not specified",
-);
+// console.log("PostgreSQL host:", dbUrl.hostname);
+// console.log(
+//   "PostgreSQL SSL mode:",
+//   dbUrl.searchParams.get("sslmode") || "not specified",
+// );
 
 const pool = new Pool({
   connectionString,
