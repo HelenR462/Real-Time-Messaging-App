@@ -19,15 +19,16 @@ function Login({ inputValue = {}, setInputValue }) {
 
       console.log("Login response:", response.data);
 
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      const token = response.data.token;
-      console.log("Login response:", response.data);
+      const { token, user } = response.data;
 
-      if (token) {
-        localStorage.setItem("token", token);
-        navigate("/homepage");
+      if (!token || !user) {
+        throw new Error("Login response is missing the token or user.");
       }
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      navigate("/homepage");
     } catch (error) {
       console.error("Login failed:", error.message);
 
