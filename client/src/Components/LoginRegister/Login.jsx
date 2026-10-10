@@ -5,7 +5,7 @@ import "./LoginRegister.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-function Login({ inputValue , setInputValue }) {
+function Login({ inputValue = {}, setInputValue }) {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
