@@ -6,12 +6,12 @@ const db = require("../db");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 async function findUser(email) {
-  const check = await db.query(`
-  SELECT current_database() AS database_name,
-         current_schema() AS schema_name,
-         to_regclass('public.users') AS users_table`);
+  // const check = await db.query(`
+  // SELECT current_database() AS database_name,
+  //        current_schema() AS schema_name,
+  //        to_regclass('public.users') AS users_table`);
 
-  console.log("Login database check:", check.rows[0]);
+  // console.log("Login database check:", check.rows[0]);
 
   const result = await db.query(
     "SELECT user_id, username, email, password_hash, image_url FROM public.users WHERE LOWER(email) = LOWER($1)",
