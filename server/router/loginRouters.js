@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const db = require("../db");
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
 async function findUser(email) {
@@ -37,6 +38,9 @@ router.post("/login", async (req, res) => {
     if (!passwordIsMatch) {
       return res.status(400).json({ message: "Invalid password!" });
     }
+
+    console.log("JWT_SECRET loaded:", Boolean(process.env.JWT_SECRET));
+console.log("JWT_SECRET length:", process.env.JWT_SECRET?.length ?? 0);
 
     const token = jwt.sign(
       { user_id: user.user_id, username: user.username },
