@@ -13,7 +13,7 @@ function Register({ inputValue, setInputValue }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${API_URL}/api/login`, inputValue);
+      const response = await axios.post(`${API_URL}/api/register`, inputValue);
 
       if (response.status === 201) {
         setMessage(response.data.message);
