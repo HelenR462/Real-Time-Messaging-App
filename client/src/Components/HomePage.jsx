@@ -9,7 +9,7 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [conversationHistory, setConversationHistory] = useState({});
+  
 
   const navigate = useNavigate();
 
