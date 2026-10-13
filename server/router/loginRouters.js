@@ -48,6 +48,16 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1h" },
     );
 
+console.log(
+  "JWT_SECRET loaded:",
+  Boolean(process.env.JWT_SECRET)
+);
+
+console.log(
+  "JWT_SECRET length:",
+  process.env.JWT_SECRET?.length ?? 0
+);
+
     res.json({
       message: "Login successful!",
       token,
