@@ -26,7 +26,7 @@ function ChatDisplay({
           <p>No messages available.</p>
         ) : (
           <ul className='messages-list'>
-           {messages.map((message, index) => (
+            {messages.map((message, index) => (
               <li key={message.id || index} className='chat-card'>
                 <img
                   src={
@@ -37,11 +37,14 @@ function ChatDisplay({
                   className='chat-card-image'
                   alt={
                     message.sender_id === loggedInUser?.user_id
-                      ? loggedInUser?.username
-                      : selectedUser?.username
-                        ? "chat-card sender"
-                        : "chat-card receiver"
+                      ? loggedInUser?.username || "Sender"
+                      : selectedUser?.username || "Receiver"
                   }
+                  onError={(e) => {
+                    console.error("Failed to load image:", e.currentTarget.src);
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = `${API_URL}/assets/images/default.png`;
+                  }}
                 />
                 <div className='chat-card-content'>
                   <p className='chat-username'>
