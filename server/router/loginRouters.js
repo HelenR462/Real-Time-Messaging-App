@@ -7,13 +7,7 @@ const db = require("../db");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 async function findUser(email) {
-  // const check = await db.query(`
-  // SELECT current_database() AS database_name,
-  //        current_schema() AS schema_name,
-  //        to_regclass('public.users') AS users_table`);
-
-  // console.log("Login database check:", check.rows[0]);
-
+ 
   const result = await db.query(
     "SELECT user_id, username, email, password_hash, image_url FROM public.users WHERE LOWER(email) = LOWER($1)",
     [email],
@@ -42,13 +36,7 @@ router.post("/login", async (req, res) => {
     console.log("JWT_SECRET loaded:", Boolean(process.env.JWT_SECRET));
     console.log("JWT_SECRET length:", process.env.JWT_SECRET?.length ?? 0);
 
-    const token = jwt.sign(
-      { user_id: user.user_id, username: user.username },
-      JWT_SECRET,
-      { expiresIn: "1h" },
-    );
-
-console.log(
+    console.log(
   "JWT_SECRET loaded:",
   Boolean(process.env.JWT_SECRET)
 );
@@ -57,6 +45,16 @@ console.log(
   "JWT_SECRET length:",
   process.env.JWT_SECRET?.length ?? 0
 );
+
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is missing from the server environment");
+}
+
+    const token = jwt.sign(
+      { user_id: user.user_id, username: user.username },
+      JWT_SECRET,
+      { expiresIn: "1h" },
+    );
 
     res.json({
       message: "Login successful!",
