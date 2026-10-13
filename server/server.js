@@ -7,6 +7,11 @@ const { Pool } = require("pg");
 
 require("dotenv").config();
 
+console.log(
+  "JWT_SECRET available at startup:",
+  Boolean(process.env.JWT_SECRET)
+);
+
 const loginRoutes = require("./router/loginRouters");
 const registerRoutes = require("./router/registerRouters");
 const messagesRoutes = require("./router/messagesRouters");
