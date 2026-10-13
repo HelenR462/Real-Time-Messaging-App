@@ -9,6 +9,7 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [conversationHistory, setConversationHistory] = useState({});
 
   const navigate = useNavigate();
 
@@ -54,31 +55,86 @@ function HomePage({ inputValue = {}, handleSendMessage }) {
     }
   }, [selectedUser]);
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      const token = localStorage.getItem("token");
+  
+useEffect(() => {
+  let cancelled = false;
 
-      if (!token || !loggedInUser || !selectedUser) return;
+  const fetchMessages = async () => {
+    const token = localStorage.getItem("token");
 
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/messages`, {
-          headers: { Authorization: `Bearer ${token}` },
+    if (!token || !loggedInUser?.user_id || !selectedUser?.user_id) {
+      setMessages([]);
+      setLoading(false);
+      return;
+    }
+
+    setMessages([]);
+    setLoading(true);
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/messages`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           params: {
             selectedUserId: selectedUser.user_id,
           },
-        });
+        }
+      );
 
+      if (!cancelled) {
         setMessages(response.data);
-        console.log("Fetched messages:", response.data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching messages:", err);
+      }
+    } catch (err) {
+      if (!cancelled) {
+        console.error(
+          "Error fetching messages:",
+          err.response?.data || err.message
+        );
+        setMessages([]);
+      }
+    } finally {
+      if (!cancelled) {
         setLoading(false);
       }
-    };
+    }
+  };
 
-    fetchMessages();
-  }, [loggedInUser, selectedUser]);
+  fetchMessages();
+
+  return () => {
+    cancelled = true;
+  };
+}, [loggedInUser?.user_id, selectedUser?.user_id]);
+
+
+  // useEffect(() => {
+  //   const fetchMessages = async () => {
+  //     const token = localStorage.getItem("token");
+
+  //     if (!token || !loggedInUser || !selectedUser) return;
+
+  //     try {
+  //       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/messages`, {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //         params: {
+  //           selectedUserId: selectedUser.user_id,
+  //         },
+  //       });
+
+  //       setMessages(response.data);
+  //       console.log("Fetched messages:", response.data);
+  //       setLoading(false);
+  //     } catch (err) {
+  //       console.error("Error fetching messages:", err);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchMessages();
+  // }, [loggedInUser, selectedUser]);
 
   return (
     <div className='home-page'>

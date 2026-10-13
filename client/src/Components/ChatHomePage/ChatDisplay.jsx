@@ -44,29 +44,36 @@ function ChatDisplay({
             {messages.map((message, index) => (
               <li key={message.id || index} className='chat-card'>
                 <img
-                  src={getImageUrl(
-                    message.sender_id === loggedInUser?.user_id
-                      ? loggedInUser?.image_url
-                      : selectedUser?.image_url,
-                  )}
-                  className='chat-card-image'
-                  alt={
-                    message.sender_id === loggedInUser?.user_id
-                      ? loggedInUser?.username || "Sender"
-                      : selectedUser?.username || "Receiver"
+                  src={
+                    message.sender_image
+                      ? `${API_URL}${
+                          message.sender_image.startsWith("/")
+                            ? message.sender_image
+                            : `/assets/images/${message.sender_image.split("/").pop()}`
+                        }`
+                      : `${API_URL}/assets/images/default.png`
                   }
+                  alt={message.sender_username || "User"}
                   onError={(e) => {
-                    console.error("Failed to load image:", e.currentTarget.src);
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = `${API_URL}/assets/images/default.png`;
                   }}
                 />
+
                 <div className='chat-card-content'>
                   <p className='chat-username'>
+                    {message.sender_username ||
+                      (Number(message.sender_id) ===
+                      Number(loggedInUser?.user_id)
+                        ? loggedInUser?.username
+                        : selectedUser?.username)}
+                  </p>
+
+                  {/* <p className='chat-username'>
                     {message.sender_id === loggedInUser?.user_id
                       ? loggedInUser.username
                       : selectedUser?.username || loggedInUser.username}
-                  </p>
+                  </p> */}
 
                   <p className='chat-message'>{message.user_message}</p>
                 </div>
