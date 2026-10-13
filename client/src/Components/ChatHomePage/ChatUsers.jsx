@@ -61,7 +61,7 @@ const ChatUsers = ({ selectedUser, setSelectedUser, loggedInUser }) => {
               })
             }
           >
-                       <img
+            <img
               src={
                 user.image_url
                   ? `${process.env.REACT_APP_API_URL}/${

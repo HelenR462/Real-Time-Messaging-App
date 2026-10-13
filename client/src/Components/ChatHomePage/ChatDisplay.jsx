@@ -3,6 +3,16 @@ import ChatUsers from "./ChatUsers";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+const getImageUrl = (imageUrl) => {
+  if (!imageUrl) {
+    return `${API_URL}/assets/images/default.png`;
+  }
+
+  const filename = imageUrl.split("/").pop();
+
+  return `${API_URL}/assets/images/${filename}`;
+};
+
 function ChatDisplay({
   selectedUser,
   loggedInUser,
@@ -15,7 +25,12 @@ function ChatDisplay({
     <div className='chat-display'>
       <div className='chat-users'>
         <h2>Friends</h2>
-        <ChatUsers setSelectedUser={setSelectedUser} />
+        {/* <ChatUsers setSelectedUser={setSelectedUser} /> */}
+        <ChatUsers
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+          loggedInUser={loggedInUser}
+        />
       </div>
 
       <div className='chat-board'>
@@ -29,11 +44,11 @@ function ChatDisplay({
             {messages.map((message, index) => (
               <li key={message.id || index} className='chat-card'>
                 <img
-                  src={
+                  src={getImageUrl(
                     message.sender_id === loggedInUser?.user_id
-                      ? `${API_URL}${loggedInUser?.image_url}`
-                      : `${API_URL}${selectedUser?.image_url}`
-                  }
+                      ? loggedInUser?.image_url
+                      : selectedUser?.image_url,
+                  )}
                   className='chat-card-image'
                   alt={
                     message.sender_id === loggedInUser?.user_id
