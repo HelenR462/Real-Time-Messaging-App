@@ -61,13 +61,23 @@ const ChatUsers = ({ selectedUser, setSelectedUser, loggedInUser }) => {
               })
             }
           >
-            <img
+                       <img
               src={
                 user.image_url
-                  ? `${process.env.REACT_APP_API_URL}${user.image_url}`
+                  ? `${process.env.REACT_APP_API_URL}/${
+                      user.image_url.startsWith("/")
+                        ? user.image_url.slice(1)
+                        : user.image_url.startsWith("assets/images/")
+                          ? user.image_url
+                          : `assets/images/${user.image_url}`
+                    }`
                   : `${process.env.REACT_APP_API_URL}/assets/images/default.png`
               }
               alt={user.username}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = `${process.env.REACT_APP_API_URL}/assets/images/default.png`;
+              }}
             />
 
             <span className='users'>{user.username}</span>
