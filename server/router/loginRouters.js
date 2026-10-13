@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
     }
 
     console.log("JWT_SECRET loaded:", Boolean(process.env.JWT_SECRET));
-console.log("JWT_SECRET length:", process.env.JWT_SECRET?.length ?? 0);
+    console.log("JWT_SECRET length:", process.env.JWT_SECRET?.length ?? 0);
 
     const token = jwt.sign(
       { user_id: user.user_id, username: user.username },

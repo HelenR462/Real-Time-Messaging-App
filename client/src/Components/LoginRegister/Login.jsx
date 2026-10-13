@@ -15,7 +15,10 @@ function Login({ inputValue = {}, setInputValue }) {
     console.log("Logging in with:", inputValue);
 
     try {
-      const response = await axios.post(`${API_URL}/api/login`, inputValue);
+      const response = await axios.post(
+        `${API_URL}/api/login`,
+        (inputValue = {}),
+      );
 
       console.log("Login response:", response.data);
 
