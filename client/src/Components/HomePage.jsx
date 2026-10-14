@@ -109,33 +109,6 @@ useEffect(() => {
   };
 }, [loggedInUser?.user_id, selectedUser?.user_id]);
 
-
-  // useEffect(() => {
-  //   const fetchMessages = async () => {
-  //     const token = localStorage.getItem("token");
-
-  //     if (!token || !loggedInUser || !selectedUser) return;
-
-  //     try {
-  //       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/messages`, {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //         params: {
-  //           selectedUserId: selectedUser.user_id,
-  //         },
-  //       });
-
-  //       setMessages(response.data);
-  //       console.log("Fetched messages:", response.data);
-  //       setLoading(false);
-  //     } catch (err) {
-  //       console.error("Error fetching messages:", err);
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchMessages();
-  // }, [loggedInUser, selectedUser]);
-
   return (
     <div className='home-page'>
       {loading ? (

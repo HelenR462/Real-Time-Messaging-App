@@ -25,8 +25,7 @@ function ChatDisplay({
     <div className='chat-display'>
       <div className='chat-users'>
         <h2>Friends</h2>
-        {/* <ChatUsers setSelectedUser={setSelectedUser} /> */}
-        <ChatUsers
+         <ChatUsers
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
           loggedInUser={loggedInUser}

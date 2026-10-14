@@ -29,15 +29,12 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
       const senderId = Number(message.sender_id);
       const receiverId = Number(message.receiver_id);
 
-      // Check whether this message belongs to the open conversation
       const belongsToCurrentConversation =
         (senderId === currentUserId && receiverId === selectedUserId) ||
         (senderId === selectedUserId && receiverId === currentUserId);
 
-      // Ignore messages from other conversations
       if (!belongsToCurrentConversation) return;
 
-      // Prevent duplicate messages
       setChats((prev) => {
         if (
           message.message_id &&
@@ -59,24 +56,6 @@ function Chats({ setChats, selectedUser, loggedInUser }) {
       socket.off("receive_message", handleReceiveMessage);
     };
   }, [loggedInUser?.user_id, selectedUser?.user_id, setChats]);
-
-  // useEffect(() => {
-  //   if (!loggedInUser?.user_id) return;
-
-  //   socket.emit("join", loggedInUser.user_id);
-
-  //   const handleReceiveMessage = (message) => {
-  //     console.log("RECEIVED ON FRONTEND:", message);
-
-  //     setChats((prev) => [message, ...prev]);
-  //   };
-
-  //   socket.on("receive_message", handleReceiveMessage);
-
-  //   return () => {
-  //     socket.off("receive_message", handleReceiveMessage);
-  //   };
-  // }, [loggedInUser?.user_id, setChats]);
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
